@@ -37,7 +37,10 @@ public class LoginController implements Initializable {
             System.out.println("You can login");
             Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
             Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            stage.setX(450);
+            stage.setY(150);
             Scene scene = new Scene(root);
+            //scene.set
             stage.setScene(scene);
             stage.show();
         }

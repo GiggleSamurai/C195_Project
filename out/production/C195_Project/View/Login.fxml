@@ -16,7 +16,7 @@
             <TextField fx:id="UsernameTextField" />
             <Label fx:id="PasswordLabel" text="Password:" />
             <PasswordField fx:id="PasswordTextField" />
-            <Button fx:id="LoginLabel" mnemonicParsing="false" onAction="#LoginButton" text="Login" />
+            <Button fx:id="LoginLabel" mnemonicParsing="false" onAction="#LoginButton"   text="Login" />
             <Label fx:id="TimeZone" text="Time Zone" />
          </children>
       </VBox>

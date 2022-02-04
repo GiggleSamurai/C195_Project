@@ -1,11 +1,12 @@
 package DAO;
 
+import Model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import Model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 
@@ -104,6 +105,65 @@ public class UserDaoImpl {
             System.out.println("INVALID USER");
             return false;
         }
+
+    }
+
+    public static void SqlAllCustomers() throws SQLException, Exception{
+
+        DBConnection.makeConnection();
+        String sqlStatement="select * from customers";
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+
+        All_Customers.clearAllCustomers();
+
+        while(result.next()) {
+
+            int customer_id = result.getInt("Customer_ID");
+            String customer_name = result.getString("Customer_Name");
+            String address = result.getString("Address");
+            String postal_code = result.getString("Postal_Code");
+            String phone = result.getString("Phone");
+            int division_id = result.getInt("Division_ID");
+
+            Customer thisCustomer = new Customer(customer_id, customer_name, address, postal_code, phone, division_id);
+            All_Customers.addCustomer(thisCustomer);
+
+        }
+        DBConnection.closeConnection();
+
+    }
+
+    public static void SqlAllAppointments() throws SQLException, Exception{
+
+        DBConnection.makeConnection();
+        //String sqlStatement="select * from appointments";
+        String sqlStatement= "SELECT * FROM appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID;";
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+
+        //SELECT * FROM table1 appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID;
+
+        All_Appointments.clearAllAppointments();
+
+        while(result.next()) {
+
+            int appointment_id = result.getInt("Appointment_ID");
+            String title = result.getString("Title");
+            String description = result.getString("Description");
+            String location = result.getString("Location");
+            String contact_name = result.getString("Contact_Name");
+            String type = result.getString("Type");
+            Timestamp start_datetime = result.getTimestamp("Start");
+            Timestamp end_datetime = result.getTimestamp("End");
+            int customer_id = result.getInt("Customer_ID");
+            int user_id = result.getInt("User_ID");
+
+            Appointment thisAppointment = new Appointment(appointment_id, title, description, location, contact_name, type, start_datetime, end_datetime, customer_id, user_id);
+            All_Appointments.addAppointment(thisAppointment);
+
+        }
+        DBConnection.closeConnection();
 
     }
 }
