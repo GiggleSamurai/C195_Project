@@ -16,7 +16,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CustomerAddController implements Initializable {
+public class CustomerUpdateController implements Initializable {
+    public TextField Customer_IdTextField;
     public TextField CustomerNameInput;
     public TextField AddressInput;
     public TextField PostalCodeInput;
@@ -24,14 +25,16 @@ public class CustomerAddController implements Initializable {
     public ComboBox DivisionIdComboBox;
     public First_Division selectedDivision;
 
+
     public void SaveButton(ActionEvent actionEvent) throws Exception {
         selectedDivision = (First_Division) DivisionIdComboBox.getSelectionModel().getSelectedItem();
         System.out.println(selectedDivision.getDivision_Id());
-        UserDaoImpl.SqlInsertCustomer( CustomerNameInput.getText(),
-                                       AddressInput.getText(),
-                                       PostalCodeInput.getText(),
-                                       PhoneInput.getText(),
-                                       selectedDivision.getDivision_Id());
+        UserDaoImpl.SqlUpdateCustomer( Customer_IdTextField.getText(),
+                CustomerNameInput.getText(),
+                AddressInput.getText(),
+                PostalCodeInput.getText(),
+                PhoneInput.getText(),
+                selectedDivision.getDivision_Id());
 
         Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
@@ -60,7 +63,16 @@ public class CustomerAddController implements Initializable {
         }
 
         DivisionIdComboBox.setItems(All_First_Division.getAllFirst_Division());
-        DivisionIdComboBox.getSelectionModel().selectFirst();
+
+        Customer_IdTextField.setText(Integer.toString(MainController.selectedCustomer.getCustomer_Id()));
+        CustomerNameInput.setText(MainController.selectedCustomer.getCustomer_Name());
+        AddressInput.setText(MainController.selectedCustomer.getAddress());
+        PostalCodeInput.setText(MainController.selectedCustomer.getPostal_Code());
+        PhoneInput.setText(MainController.selectedCustomer.getPhone());
+
+        int thisDivision_Id = All_First_Division.lookupFirst_Division(MainController.selectedCustomer.getDivision_Id());
+
+        DivisionIdComboBox.getSelectionModel().select(thisDivision_Id);
     }
 
 

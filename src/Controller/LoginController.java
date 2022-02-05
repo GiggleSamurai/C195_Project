@@ -10,16 +10,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
-import java.util.EventObject;
-import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 
 public class LoginController implements Initializable {
@@ -33,7 +29,7 @@ public class LoginController implements Initializable {
     public void LoginButton(ActionEvent actionEvent) throws Exception, IOException {
 
         User LoginUser = new User(0000000, UsernameTextField.getText(), PasswordTextField.getText());
-        boolean checkLogin = UserDaoImpl.checkUser(LoginUser);
+        boolean checkLogin = UserDaoImpl.SqlCheckUser(LoginUser);
         if (checkLogin == true){
 
             System.out.println("You can login");

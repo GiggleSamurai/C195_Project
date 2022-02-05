@@ -6,10 +6,8 @@ import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
@@ -18,6 +16,7 @@ import java.util.ArrayList;
 public class UserDaoImpl {
     private static String currentApplicationUser;
     static boolean act;
+    /*
     public static User getUser(String userName) throws SQLException, Exception{
         // type is name or phone, value is the name or the phone #
         DBConnection.makeConnection();
@@ -71,8 +70,8 @@ public class UserDaoImpl {
         }
         DBConnection.closeConnection();
     }
-
-    public static boolean checkUser(User checkThisUser) throws SQLException, Exception{
+*/
+    public static boolean SqlCheckUser(User checkThisUser) throws SQLException, Exception{
 
         DBConnection.makeConnection();
         String checkThisUserName = checkThisUser.getUserName();
@@ -231,6 +230,33 @@ public class UserDaoImpl {
         }
         DBConnection.closeConnection();
 
+    }
+
+    public static void SqlDeleteCustomer(Customer selectedCustomer) throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement = "delete from customers where Customer_Id = " + Integer.toString(selectedCustomer.getCustomer_Id());
+        Query.makeQuery(sqlStatement);
+        All_Customers.refreshAllCustomers();
+        DBConnection.closeConnection();
+    }
+
+
+
+    public static void SqlUpdateCustomer( String customer_id,String customer_name, String address, String postal_code, String phone, int division_id) throws Exception {
+        DBConnection.makeConnection();
+
+        String sqlStatement =
+                "UPDATE Customers SET Customer_Name = '"+ customer_name + "'" +
+                ", Address ='" + address + "'" +
+                ", Postal_Code ='" + postal_code + "'" +
+                ", Phone ='" + phone + "'" +
+                ", Division_ID =" + division_id  +
+                ", Last_Update = NOW()" +
+                ", Last_Updated_By = '" + currentApplicationUser +"'"+
+                " WHERE Customer_ID = " + customer_id;
+
+        Query.makeQuery(sqlStatement);
+        All_Customers.refreshAllCustomers();
     }
 }
 

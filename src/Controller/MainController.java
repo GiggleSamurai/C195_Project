@@ -3,14 +3,14 @@ package Controller;
 import DAO.UserDaoImpl;
 import Model.All_Appointments;
 import Model.All_Customers;
+import Model.Customer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -38,6 +38,8 @@ public class MainController  implements Initializable {
     public TableColumn End;
     public TableColumn appointmentCustomer_ID;
     public TableColumn User_ID;
+
+    public static Customer selectedCustomer;
 
     /**
      * Initialize when main form FXML is load
@@ -80,5 +82,47 @@ public class MainController  implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void UpdateCustomerButton(ActionEvent actionEvent) throws IOException {
+
+        selectedCustomer = (Customer) CustomersTable.getSelectionModel().getSelectedItem();
+        if(selectedCustomer == null) {
+            return;
+        } else {
+            Parent root = FXMLLoader.load(getClass().getResource("/View/CustomerUpdate.fxml"));
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            //stage.setX(450);
+            //stage.setY(150);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+    }
+
+    public void DeleteCustomerButton(ActionEvent actionEvent) throws Exception {
+        Customer SelectedCustomer = (Customer) CustomersTable.getSelectionModel().getSelectedItem();
+
+        if(SelectedCustomer == null) {
+            return;
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Customer");
+            alert.setHeaderText("Delete");
+            alert.setContentText("Do you want to delete this customer?");
+            if (alert.showAndWait().get()== ButtonType.OK) {
+                UserDaoImpl.SqlDeleteCustomer(SelectedCustomer);
+
+                Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.setX(450);
+                stage.setY(150);
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+
+            } else {return;}
+        }
     }
 }

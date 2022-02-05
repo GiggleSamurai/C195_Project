@@ -36,9 +36,21 @@ public class All_First_Division {
      *
      * @return refresh the observable list of all first division
      */
-    public static void refreshAllCustomers() throws Exception {
+    public static void refreshFirst_Division() throws Exception {
         clearAllFirst_Division();
         UserDaoImpl.SqlAllFirst_Division();
+    }
+
+    public static int lookupFirst_Division(int First_DivisionID) {
+        int First_DivisionArrayIndex = -1;
+
+        for(First_Division foundObj : allFirst_Division){
+            First_DivisionArrayIndex += 1;
+            if (foundObj.getDivision_Id() == First_DivisionID) {
+                return First_DivisionArrayIndex;
+            }
+        }
+        return 0;
     }
 
 }
