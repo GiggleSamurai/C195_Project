@@ -258,5 +258,27 @@ public class UserDaoImpl {
         Query.makeQuery(sqlStatement);
         All_Customers.refreshAllCustomers();
     }
+
+
+    public static void SqlAllContact() throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement="SELECT * FROM contacts";
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+
+        All_First_Division.clearAllFirst_Division();
+
+        while(result.next()) {
+
+            int contact_id = result.getInt("Contact_ID");
+            String contact_name = result.getString("Contact_Name");
+            Contact thisContact = new Contact(contact_id,contact_name);
+
+            All_Contacts.addContact(thisContact);
+
+        }
+        DBConnection.closeConnection();
+
+    }
 }
 

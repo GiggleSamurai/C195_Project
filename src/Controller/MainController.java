@@ -125,4 +125,20 @@ public class MainController  implements Initializable {
             } else {return;}
         }
     }
+
+    public void AddAppointmentButton(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/View/AppointmentAdd.fxml"));
+        Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        //stage.setX(450);
+        //stage.setY(150);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void UpdateAppointmentButton(ActionEvent actionEvent) {
+    }
+
+    public void DeleteAppointmentButton(ActionEvent actionEvent) {
+    }
 }
