@@ -6,6 +6,7 @@ import Utility.UserLanguage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
+import java.util.EventObject;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -36,7 +38,8 @@ public class LoginController implements Initializable {
 
             System.out.println("You can login");
             Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
-            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+           // Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setX(450);
             stage.setY(150);
             Scene scene = new Scene(root);
@@ -65,5 +68,9 @@ public class LoginController implements Initializable {
         PasswordLabel.setText(UserLanguage.rb.getString("password"));
         LoginLabel.setText(UserLanguage.rb.getString("login"));
 
+    }
+
+    public void PasswordEnter(ActionEvent actionEvent) throws Exception {
+        LoginButton(actionEvent);
     }
 }

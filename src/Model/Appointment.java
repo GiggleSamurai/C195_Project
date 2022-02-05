@@ -1,6 +1,7 @@
 package Model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Appointment {
@@ -10,12 +11,12 @@ public class Appointment {
     private String location;
     private String contact_name;
     private String type;
-    private Timestamp start_datetime;
-    private Timestamp end_datetime;
+    private LocalDateTime start_datetime;
+    private LocalDateTime end_datetime;
     private int customer_id;
     private int user_id;
 
-    public Appointment(int appointment_id, String title, String description, String location, String contact_name, String type, Timestamp start_datetime, Timestamp end_datetime, int customer_id, int user_id) {
+    public Appointment(int appointment_id, String title, String description, String location, String contact_name, String type, LocalDateTime start_datetime, LocalDateTime end_datetime, int customer_id, int user_id) {
         this.appointment_id = appointment_id;
         this.title = title;
         this.description = description;
@@ -116,28 +117,28 @@ public class Appointment {
     /**
      * @return the start_datetime
      */
-    public Timestamp getStart_Datetime () {
+    public LocalDateTime getStart_Datetime () {
         return start_datetime;
     }
 
     /**
      * @param start_datetime the start_datetime to set
      */
-    public void setStart_Datetime(Timestamp start_datetime) {
+    public void setStart_Datetime(LocalDateTime start_datetime) {
         this.start_datetime =  start_datetime;
     }
 
     /**
      * @return the end_datetime
      */
-    public Timestamp getEnd_Datetime () {
+    public LocalDateTime getEnd_Datetime () {
         return end_datetime;
     }
 
     /**
      * @param end_datetime the end_datetime to set
      */
-    public void setEnd_Datetime(Timestamp end_datetime) {
+    public void setEnd_Datetime(LocalDateTime end_datetime) {
         this.end_datetime =  end_datetime;
     }
 

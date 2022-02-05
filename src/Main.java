@@ -17,6 +17,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception{
+      //  UserDaoImpl.SqlInsertCustomer( "louis", "address", "postal_code", "phone", 60);
+
         if (Locale.getDefault().equals("fr")){
             UserLanguage.setLanguage(Locale.FRENCH);
         } else {

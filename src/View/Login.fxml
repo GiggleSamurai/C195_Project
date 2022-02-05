@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane prefHeight="500.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LoginController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="126.0" layoutY="124.0" prefHeight="200.0" prefWidth="149.0" spacing="10.0">
@@ -15,8 +14,8 @@
             <Label fx:id="UsernameLabel" text="Username:" />
             <TextField fx:id="UsernameTextField" />
             <Label fx:id="PasswordLabel" text="Password:" />
-            <PasswordField fx:id="PasswordTextField" />
-            <Button fx:id="LoginLabel" mnemonicParsing="false" onAction="#LoginButton"   text="Login" />
+            <PasswordField fx:id="PasswordTextField" onAction="#PasswordEnter" />
+            <Button fx:id="LoginLabel" mnemonicParsing="false" onAction="#LoginButton" text="Login" />
             <Label fx:id="TimeZone" text="Time Zone" />
          </children>
       </VBox>

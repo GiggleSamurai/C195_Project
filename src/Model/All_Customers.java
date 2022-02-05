@@ -1,5 +1,6 @@
 package Model;
 
+import DAO.UserDaoImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -28,6 +29,15 @@ public class All_Customers {
      */
     public static void clearAllCustomers() {
         allCustomers.clear();
+    }
+
+    /**
+     *
+     * @return refresh the observable list of all customers
+     */
+    public static void refreshAllCustomers() throws Exception {
+        clearAllCustomers();
+        UserDaoImpl.SqlAllCustomers();
     }
 
 }

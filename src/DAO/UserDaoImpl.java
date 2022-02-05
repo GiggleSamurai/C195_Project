@@ -7,11 +7,16 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 
 
 public class UserDaoImpl {
+    private static String currentApplicationUser;
     static boolean act;
     public static User getUser(String userName) throws SQLException, Exception{
         // type is name or phone, value is the name or the phone #
@@ -57,7 +62,7 @@ public class UserDaoImpl {
         ResultSet result=Query.getResult();
         System.out.println(result.toString());
         while(result.next()){
-            int userid=result.getInt("User_ID");
+            int userid = result.getInt("User_ID");
             String userNameG=result.getString("User_Name");
             String password=result.getString("Password");
             System.out.println(userid);
@@ -70,9 +75,9 @@ public class UserDaoImpl {
     public static boolean checkUser(User checkThisUser) throws SQLException, Exception{
 
         DBConnection.makeConnection();
-        String checkThisUserID = checkThisUser.getUserName();
+        String checkThisUserName = checkThisUser.getUserName();
         String checkThisPassword = checkThisUser.getPassword();
-        String sqlStatement="select * from users where User_Name =" +"'"+ checkThisUserID +"'";
+        String sqlStatement="select * from users where User_Name =" +"'"+ checkThisUserName +"'";
         Query.makeQuery(sqlStatement);
         ResultSet result = Query.getResult();
 
@@ -89,11 +94,12 @@ public class UserDaoImpl {
         }
         DBConnection.closeConnection();
 
-        if (userNameList.contains(checkThisUserID)) {
+        if (userNameList.contains(checkThisUserName)) {
             System.out.println("VALID USER");
-            System.out.println(userNameList.indexOf(checkThisUserID));
-            int listIndex = userNameList.indexOf(checkThisUserID);
+            System.out.println(userNameList.indexOf(checkThisUserName));
+            int listIndex = userNameList.indexOf(checkThisUserName);
             if (passwordList.get(listIndex).equals(checkThisPassword)){
+                currentApplicationUser = checkThisUserName;
                 System.out.println("CORRECT PASSWORD");
                 return true;
             } else{
@@ -137,7 +143,7 @@ public class UserDaoImpl {
     public static void SqlAllAppointments() throws SQLException, Exception{
 
         DBConnection.makeConnection();
-        //String sqlStatement="select * from appointments";
+
         String sqlStatement= "SELECT * FROM appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID;";
         Query.makeQuery(sqlStatement);
         ResultSet result = Query.getResult();
@@ -154,13 +160,73 @@ public class UserDaoImpl {
             String location = result.getString("Location");
             String contact_name = result.getString("Contact_Name");
             String type = result.getString("Type");
-            Timestamp start_datetime = result.getTimestamp("Start");
-            Timestamp end_datetime = result.getTimestamp("End");
+            LocalDateTime start_datetime = result.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime end_datetime = result.getTimestamp("End").toLocalDateTime();
             int customer_id = result.getInt("Customer_ID");
             int user_id = result.getInt("User_ID");
 
-            Appointment thisAppointment = new Appointment(appointment_id, title, description, location, contact_name, type, start_datetime, end_datetime, customer_id, user_id);
+            //To User Local Time Conversion
+            ZonedDateTime utcZoneTime_start_datetime = start_datetime.atZone(ZoneId.of("UTC"));
+            ZonedDateTime userZoneTime_start_datetime = utcZoneTime_start_datetime.withZoneSameInstant(ZoneId.systemDefault());
+            LocalDateTime userTime_start_datetime = userZoneTime_start_datetime.toLocalDateTime();
+
+            ZonedDateTime utcZoneTime_end_datetime = end_datetime.atZone(ZoneId.of("UTC"));
+            ZonedDateTime userZoneTime_end_datetime = utcZoneTime_end_datetime.withZoneSameInstant(ZoneId.systemDefault());
+            LocalDateTime userTime_end_datetime = userZoneTime_end_datetime.toLocalDateTime();
+
+            Appointment thisAppointment = new Appointment(appointment_id, title, description, location, contact_name, type, userTime_start_datetime, userTime_end_datetime, customer_id, user_id);
             All_Appointments.addAppointment(thisAppointment);
+
+        }
+        DBConnection.closeConnection();
+
+    }
+    //SqlInsertCustomer( String customer_name, String address, String postal_code, String phone, int division_id)
+    public static void SqlInsertCustomer( String customer_name, String address, String postal_code, String phone, int division_id) throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement = "SELECT MAX(Customer_ID) FROM customers";
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+        int maxUserId = 0;
+        while (result.next()) {
+            maxUserId = result.getInt("MAX(Customer_ID)");
+        }
+        System.out.println(String.valueOf(maxUserId + 1));
+        //currentApplicationUser ="hihi";
+        sqlStatement = "INSERT INTO customers VALUES(" +
+                        String.valueOf(maxUserId + 1) +
+                        ", '" + customer_name + "'" +
+                        ", '" + address + "'" +
+                        ", '" + postal_code + "'" +
+                        ", '" + phone + "'" +
+                        ", NOW()" +
+                        ", '" + currentApplicationUser + "'" +
+                        ", NOW()" +
+                        ", '" + currentApplicationUser + "'" +
+                        ", " + String.valueOf(division_id) +
+                        ")";
+        Query.makeQuery(sqlStatement);
+
+        System.out.println(sqlStatement);
+        All_Customers.refreshAllCustomers();
+      //  Query.makeQuery(sqlStatement);
+    }
+
+    public static void SqlAllFirst_Division() throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement="select * from first_level_divisions";
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+
+        All_First_Division.clearAllFirst_Division();
+
+        while(result.next()) {
+
+            int division_id = result.getInt("Division_ID");
+            String division = result.getString("Division");
+            First_Division thisFirst_Division = new First_Division(division_id,division);
+
+            All_First_Division.addFirst_Division(thisFirst_Division);
 
         }
         DBConnection.closeConnection();
