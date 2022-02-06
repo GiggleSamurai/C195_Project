@@ -10,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -70,60 +67,58 @@ public class AppointmentAddController implements Initializable {
     }
 
     public void SaveButton(ActionEvent actionEvent) throws Exception {
-        selectedContact = (Contact) ContactComboBox.getSelectionModel().getSelectedItem();
+        try {
+            selectedContact = (Contact) ContactComboBox.getSelectionModel().getSelectedItem();
 
-        String title = TitleInput.getText();
-        String description = TitleInput.getText();
-        String location = TitleInput.getText();
-        String type = TitleInput.getText();
+            String title = TitleInput.getText();
+            String description = TitleInput.getText();
+            String location = TitleInput.getText();
+            String type = TitleInput.getText();
 
-        LocalDate StartDate = StartDatePicker.getValue();
-        String StartHour = StartHourComboBox.getSelectionModel().getSelectedItem().toString();
-        String StartAMorPM = StartAmPmComboBox.getSelectionModel().getSelectedItem().toString();
-        String StartMinute = StartMinComboBox.getSelectionModel().getSelectedItem().toString();
-        LocalDateTime userSelectStartTime = LocalDateTime.of(StartDate.getYear(), StartDate.getMonthValue(), StartDate.getDayOfMonth(), DisplayTime.getHourInt(StartHour, StartAMorPM), DisplayTime.getMinuteInt(StartMinute));
-        LocalDateTime start_utcDatetime = DisplayTime.userTime2UTC(userSelectStartTime);
+            LocalDate StartDate = StartDatePicker.getValue();
+            String StartHour = StartHourComboBox.getSelectionModel().getSelectedItem().toString();
+            String StartAMorPM = StartAmPmComboBox.getSelectionModel().getSelectedItem().toString();
+            String StartMinute = StartMinComboBox.getSelectionModel().getSelectedItem().toString();
+            LocalDateTime userSelectStartTime = LocalDateTime.of(StartDate.getYear(), StartDate.getMonthValue(), StartDate.getDayOfMonth(), DisplayTime.getHourInt(StartHour, StartAMorPM), DisplayTime.getMinuteInt(StartMinute));
+            LocalDateTime start_utcDatetime = DisplayTime.userTime2UTC(userSelectStartTime);
 
-        LocalDate EndDate = EndDatePicker.getValue();
-        String EndHour = EndHourComboBox.getSelectionModel().getSelectedItem().toString();
-        String EndAMorPM = EndAmPmComboBox.getSelectionModel().getSelectedItem().toString();
-        String EndMinute = EndMinComboBox.getSelectionModel().getSelectedItem().toString();
-        LocalDateTime userSelectEndTime = LocalDateTime.of(EndDate.getYear(), EndDate.getMonthValue(), EndDate.getDayOfMonth(), DisplayTime.getHourInt(EndHour, EndAMorPM), DisplayTime.getMinuteInt(EndMinute));
-        LocalDateTime end_utcDatetime = DisplayTime.userTime2UTC(userSelectEndTime);
+            LocalDate EndDate = EndDatePicker.getValue();
+            String EndHour = EndHourComboBox.getSelectionModel().getSelectedItem().toString();
+            String EndAMorPM = EndAmPmComboBox.getSelectionModel().getSelectedItem().toString();
+            String EndMinute = EndMinComboBox.getSelectionModel().getSelectedItem().toString();
+            LocalDateTime userSelectEndTime = LocalDateTime.of(EndDate.getYear(), EndDate.getMonthValue(), EndDate.getDayOfMonth(), DisplayTime.getHourInt(EndHour, EndAMorPM), DisplayTime.getMinuteInt(EndMinute));
+            LocalDateTime end_utcDatetime = DisplayTime.userTime2UTC(userSelectEndTime);
 
+            int contact_id = ((Contact) ContactComboBox.getSelectionModel().getSelectedItem()).getContact_Id();
+            int customer_id = Integer.parseInt(CustomerIdInput.getText());
+            int user_id = Integer.parseInt(UserIdInput.getText());
 
+            if(InputErrorCheck(customer_id, user_id, userSelectEndTime, userSelectStartTime, start_utcDatetime, end_utcDatetime)){
+                UserDaoImpl.SqlInsertAppointment(title,
+                        description,
+                        location,
+                        type,
+                        start_utcDatetime,
+                        end_utcDatetime,
+                        customer_id,
+                        user_id,
+                        contact_id);
 
-        int contact_id = ((Contact) ContactComboBox.getSelectionModel().getSelectedItem()).getContact_Id();
-        int customer_id = Integer.parseInt(CustomerIdInput.getText());
-        int user_id = Integer.parseInt(UserIdInput.getText());
-
-        if (userSelectEndTime.isAfter(userSelectStartTime)){
-            if (All_Appointments.checkCustomerAppointments(customer_id,userSelectStartTime) == true) {
-                if (DisplayTime.inBusinessHours(start_utcDatetime,end_utcDatetime)==true){
-                    UserDaoImpl.SqlInsertAppointment(title,
-                            description,
-                            location,
-                            type,
-                            start_utcDatetime,
-                            end_utcDatetime,
-                            customer_id,
-                            user_id,
-                            contact_id);
-
-                    Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
-                    Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-                    stage.setX(450);
-                    stage.setY(150);
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
-                } else {
-                    System.out.println("NOT IN BUSINESS HOUR!");
-                }
+                Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
+                Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                stage.setX(450);
+                stage.setY(150);
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
             }
-            else { System.out.println("BAD APPOINTMENT OVERLAP!!");}
-        } else {
-            System.out.println("End Time Must be Greater than Start Time");
+
+        } catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText("Input Error");
+            alert.setContentText("Please fill the form. \nCustomer ID & User ID must be integer.");
+            alert.showAndWait();
         }
 
     }
@@ -136,5 +131,73 @@ public class AppointmentAddController implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**
+     * RUNTIME ERROR when save method is called, this method will check each text field by using try and catch blocks, and if else statements, append all result in a single string, then set it on a label.
+     * display text field to user on error message output label with text wrap
+     * @return boolean of input text field error
+     */
+    public boolean InputErrorCheck(int customer_id, int user_id, LocalDateTime userSelectEndTime, LocalDateTime userSelectStartTime, LocalDateTime start_utcDatetime, LocalDateTime end_utcDatetime) throws Exception {
+        String errorMessage ="";
+
+        // Customer ID check
+        try {
+            if (UserDaoImpl.SqlCheckCustomer_ID(customer_id) == false){
+                String message = "Customer ID is Invalid.";
+                errorMessage += "\n"+message;
+            }
+        } catch(Exception e){
+            String message = "Customer ID is Invalid.";
+            errorMessage += "\n"+message;
+        }
+
+        // User ID check
+        try {
+            if (UserDaoImpl.SqlCheckUser_ID(user_id) == false){
+                String message = "User ID is invalid.";
+                errorMessage += "\n"+message;
+                System.out.println("User return false");
+            }
+        } catch(Exception e){
+            String message = "User ID is invalid.";
+            errorMessage += "\n"+message;
+        }
+
+        // Check if Time Greater
+        if (userSelectEndTime.isAfter(userSelectStartTime)){
+            // IT'S GOOD
+        } else {
+            String message = "End time must be greater than start time.";
+            errorMessage += "\n"+message;
+        }
+
+        // Check if Overlap
+        if (All_Appointments.checkCustomerAppointments(customer_id,userSelectStartTime) == true) {
+            // IT'S GOOD
+        }
+        else {
+            String message = "The appointment is overlap with other appointment.";
+            errorMessage += "\n"+message;
+            }
+
+        // Check if in Business Hours
+        if (DisplayTime.inBusinessHours(start_utcDatetime,end_utcDatetime)==true){
+            // IT'S GOOD
+        } else {
+            String message = "The appointment is not in business hours (EST. 8AM - 10PM ).";
+            errorMessage += "\n"+message;
+        }
+
+        if (errorMessage.isEmpty()){
+            return true;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setHeaderText("Input Error");
+            alert.setContentText(errorMessage);
+            alert.showAndWait();
+            return false;
+        }
     }
 }

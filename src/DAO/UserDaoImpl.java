@@ -337,10 +337,48 @@ public class UserDaoImpl {
 
     public static void SqlDeleteAppointment(Appointment selectedAppointment) throws Exception {
         DBConnection.makeConnection();
-        String sqlStatement = "delete from appointments where Appointment_Id = " + Integer.toString(selectedAppointment.getAppointment_ID());
+        String sqlStatement = "DELETE FROM appointments WHERE Appointment_Id = " + Integer.toString(selectedAppointment.getAppointment_ID());
         Query.makeQuery(sqlStatement);
         All_Customers.refreshAllCustomers();
         DBConnection.closeConnection();
+    }
+
+    public static boolean SqlCheckCustomer_ID(Integer customer_id) throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement = "SELECT * FROM customers WHERE Customer_ID = " + Integer.toString(customer_id);
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+
+        int thisId =0;
+        while (result.next()) {
+            thisId = result.getInt("Customer_ID");
+        }
+        DBConnection.closeConnection();
+        if (thisId == customer_id) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean SqlCheckUser_ID(Integer user_id) throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement = "SELECT * FROM users WHERE User_ID = " + Integer.toString(user_id);
+        Query.makeQuery(sqlStatement);
+
+        ResultSet result = Query.getResult();
+
+        int thisId =0;
+        while (result.next()) {
+            thisId = result.getInt("User_ID");
+        }
+
+        DBConnection.closeConnection();
+        if (thisId == user_id) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
