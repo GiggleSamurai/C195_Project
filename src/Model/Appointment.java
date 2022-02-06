@@ -2,6 +2,8 @@ package Model;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class Appointment {
@@ -168,6 +170,13 @@ public class Appointment {
      */
     public void setUser_Id(int user_id) {
         this.user_id =  user_id;
+    }
+
+    public boolean isOverlap(LocalDateTime setStartDateTime) {
+        if (setStartDateTime.isAfter(start_datetime) && setStartDateTime.isBefore(end_datetime) || setStartDateTime.equals(start_datetime)) {
+            return true;
+        }
+        return false;
     }
 
 

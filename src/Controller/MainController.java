@@ -3,6 +3,7 @@ package Controller;
 import DAO.UserDaoImpl;
 import Model.All_Appointments;
 import Model.All_Customers;
+import Model.Appointment;
 import Model.Customer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -40,6 +41,7 @@ public class MainController  implements Initializable {
     public TableColumn User_ID;
 
     public static Customer selectedCustomer;
+    public static Appointment selectedAppointment;
 
     /**
      * Initialize when main form FXML is load
@@ -139,6 +141,30 @@ public class MainController  implements Initializable {
     public void UpdateAppointmentButton(ActionEvent actionEvent) {
     }
 
-    public void DeleteAppointmentButton(ActionEvent actionEvent) {
+    public void DeleteAppointmentButton(ActionEvent actionEvent) throws Exception {
+        Appointment SelectedAppointment = (Appointment) AppointmentsTable.getSelectionModel().getSelectedItem();
+
+        if(SelectedAppointment == null) {
+            return;
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Appointment");
+            alert.setHeaderText("Delete");
+            alert.setContentText("Do you want to delete this Appointment?");
+            if (alert.showAndWait().get()== ButtonType.OK) {
+                UserDaoImpl.SqlDeleteAppointment(SelectedAppointment);
+
+                Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.setX(450);
+                stage.setY(150);
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+
+            } else {return;}
+        }
+
     }
 }

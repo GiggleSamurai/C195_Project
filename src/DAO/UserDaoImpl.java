@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -262,23 +263,84 @@ public class UserDaoImpl {
 
     public static void SqlAllContact() throws Exception {
         DBConnection.makeConnection();
-        String sqlStatement="SELECT * FROM contacts";
+        String sqlStatement = "SELECT * FROM contacts";
         Query.makeQuery(sqlStatement);
         ResultSet result = Query.getResult();
 
         All_First_Division.clearAllFirst_Division();
 
-        while(result.next()) {
+        while (result.next()) {
 
             int contact_id = result.getInt("Contact_ID");
             String contact_name = result.getString("Contact_Name");
-            Contact thisContact = new Contact(contact_id,contact_name);
+            Contact thisContact = new Contact(contact_id, contact_name);
 
             All_Contacts.addContact(thisContact);
 
         }
         DBConnection.closeConnection();
+    }
+/*        private int appointment_id;
+        private String title;
+        private String description;
+        private String location;
+        private String contact_name;
+        private String type;
+        private LocalDateTime start_datetime;
+        private LocalDateTime end_datetime;
+        private int customer_id;
+        private user_id;*/
 
+    public static void SqlInsertAppointment(String title,
+                                            String description,
+                                            String location,
+                                            String type,
+                                            LocalDateTime start_datetime,
+                                            LocalDateTime end_datetime,
+                                            int customer_id,
+                                            int user_id,
+                                            int contact_id
+                                                            ) throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement = "SELECT MAX(Appointment_ID) FROM appointments";
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+        int maxAppointmentId = 0;
+        while (result.next()) {
+            maxAppointmentId = result.getInt("MAX(Appointment_ID)");
+        }
+        System.out.println(maxAppointmentId);
+        sqlStatement = "INSERT INTO appointments VALUES(" +
+                String.valueOf(maxAppointmentId + 1) +
+                ", '" + title + "'" +
+                ", '" + description + "'" +
+                ", '" + location + "'" +
+                ", '" + type + "'" +
+                ", '" + Timestamp.valueOf(start_datetime) + "'" +
+                ", '" + Timestamp.valueOf(end_datetime) + "'" +
+                ", NOW()" +
+                ", '" + currentApplicationUser + "'" +
+                ", NOW()" +
+                ", '" + currentApplicationUser + "'" +
+                ", " + customer_id +
+                ", " + user_id +
+                ", " + contact_id +
+                ")";
+
+        System.out.println(sqlStatement);
+        Query.makeQuery(sqlStatement);
+
+
+        All_Appointments.refreshAllAppointments();
+
+    }
+
+    public static void SqlDeleteAppointment(Appointment selectedAppointment) throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement = "delete from appointments where Appointment_Id = " + Integer.toString(selectedAppointment.getAppointment_ID());
+        Query.makeQuery(sqlStatement);
+        All_Customers.refreshAllCustomers();
+        DBConnection.closeConnection();
     }
 }
 
