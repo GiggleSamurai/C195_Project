@@ -1,12 +1,14 @@
+/**
+ * @class All_Appointments.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 import DAO.UserDaoImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.time.LocalDateTime;
-
-import static Model.MonthObj.*;
 
 public class All_Appointments {
     private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
@@ -76,6 +78,14 @@ public class All_Appointments {
         return true;
     }
 
+    /**
+     *
+     * @param customer_id the customer ID
+     * @param setStartDateTime the start date time
+     * @param appointment_id the appointment ID
+     * @return boolean statement if appointment is overlap
+     * @throws Exception
+     */
     public static Boolean checkCustomerAppointmentsWithoutThis(int customer_id, LocalDateTime setStartDateTime, int appointment_id) throws Exception {
         ObservableList<Appointment> thisCustomerAppointments = getCustomerAppointments(customer_id);
         for(Appointment thisAppointment : thisCustomerAppointments){
@@ -90,6 +100,12 @@ public class All_Appointments {
         return true;
     }
 
+    /**
+     *
+     * @param loginLocalTime the user login time
+     * @return boolean statement if there is upcoming appointment in 15 min after login time
+     * @throws Exception
+     */
     public static Boolean upcoming15minAppointments(LocalDateTime loginLocalTime) throws Exception {
 
         for(Appointment thisAppointment : allAppointments){
@@ -153,7 +169,7 @@ public class All_Appointments {
         for(Appointment thisAppointment : allAppointments){
             nonUniqueListType.add(thisAppointment.getType());
         }
-        String resultString = "Total Numbers of Customer Appointment By Type:";
+        String resultString = "-------------------- Total Numbers of Customer Appointment By Type --------------------";
         for(Appointment checkThisAppointment : allAppointments){
             int count = 0;
             if (UniqueListType.contains(checkThisAppointment.getType())){
@@ -169,6 +185,44 @@ public class All_Appointments {
                 resultString += "\n" + checkThisAppointment.getType() + ": " + Integer.toString(count);
             }
         }
+
+        return resultString;
+    }
+
+    private static ObservableList<String> nonUniqueListContact = FXCollections.observableArrayList();
+    private static ObservableList<String> UniqueListContact = FXCollections.observableArrayList();
+
+    public static String getContactReport(){
+        nonUniqueListContact.clear();
+        UniqueListContact.clear();
+
+        for(Appointment thisAppointment : allAppointments){
+            nonUniqueListContact.add(thisAppointment.getContact_Name());
+        }
+        String resultString = "-------------------- The Schedule for Each Contact -------------------- ";
+        for(Appointment checkThisAppointment : allAppointments){
+            //int count = 0;
+            if (UniqueListContact.contains(checkThisAppointment.getContact_Name())){
+                //Skip this Duplicate Element
+            } else {
+                UniqueListContact.add(checkThisAppointment.getContact_Name());
+                }
+        }
+        for (String thisContact : UniqueListContact) {
+            resultString += "\nContact Name: " + thisContact;
+            for (Appointment thisAppointment : allAppointments){
+                if (thisAppointment.getContact_Name().equals(thisContact)){
+                    resultString +=
+                            "\n\tAppointment ID: "+ Integer.toString(thisAppointment.getAppointment_ID())+
+                            "\tTitle: "+ thisAppointment.getTitle() +
+                            "\tType: "+ thisAppointment.getType() +
+                            "\tStart: "+ thisAppointment.getStart_Datetime().toString() +
+                            "\tEnd: "+ thisAppointment.getEnd_Datetime().toString() +
+                            "\tCustomer ID: "+ Integer.toString(thisAppointment.getCustomer_Id());
+                }
+            }
+        }
+
 
         return resultString;
     }

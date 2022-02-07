@@ -1,3 +1,8 @@
+/**
+ * @class DBConnection.java
+ * @author Louis Wong
+ */
+
 package DAO;
 
 import java.sql.Connection;
@@ -10,9 +15,17 @@ public class DBConnection {
     private static final String username="sqlUser";
     private static final String password="Passw0rd!";
     static Connection conn;
+
+    /**
+     * establish mySQL connection with username & password
+     */
     public static void makeConnection() throws ClassNotFoundException, SQLException, Exception{
         conn=(Connection) DriverManager.getConnection(DB_URL,username,password);
     }
+
+    /**
+     * end mySQL connection
+     */
     public static void closeConnection() throws ClassNotFoundException,SQLException, Exception{
         conn.close();
     }

@@ -1,3 +1,8 @@
+/**
+ * @class User.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 public class User {
@@ -54,7 +59,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
 
 }

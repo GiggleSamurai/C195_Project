@@ -1,3 +1,8 @@
+/**
+ * @class All_First_Division.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 import DAO.UserDaoImpl;
@@ -41,6 +46,11 @@ public class All_First_Division {
         UserDaoImpl.SqlAllFirst_Division();
     }
 
+    /**
+     *
+     * @param First_DivisionID the first division ID
+     * @return the index of the first division ID
+     */
     public static int lookupFirst_Division(int First_DivisionID) {
         int First_DivisionArrayIndex = -1;
 

@@ -1,3 +1,7 @@
+/**
+ * @class ViewByWeekController.java
+ * @author Louis Wong
+ */
 package Controller;
 
 import DAO.UserDaoImpl;
@@ -38,7 +42,7 @@ public class ViewByWeekController  implements Initializable {
     public ToggleGroup MonthRadioGroup;
 
     /**
-     * Initialize when main form FXML is load
+     * Initialize elements when this FXML form is load
      */
     public void initialize(URL location, ResourceBundle resources){
         try {
@@ -64,9 +68,13 @@ public class ViewByWeekController  implements Initializable {
         appointmentCustomer_ID.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
         User_ID.setCellValueFactory(new PropertyValueFactory<>("user_Id"));
 
-
     }
 
+    /**
+     *
+     * @param actionEvent radio button of week day to filter appointment on
+     * @throws Exception
+     */
     public void day1Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisWeekdayAppointments(1));
 
@@ -82,30 +90,65 @@ public class ViewByWeekController  implements Initializable {
         User_ID.setCellValueFactory(new PropertyValueFactory<>("user_Id"));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of week day to filter appointment on
+     * @throws Exception
+     */
     public void day2Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisWeekdayAppointments(2));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of week day to filter appointment on
+     * @throws Exception
+     */
     public void day3Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisWeekdayAppointments(3));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of week day to filter appointment on
+     * @throws Exception
+     */
     public void day4Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisWeekdayAppointments(4));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of week day to filter appointment on
+     * @throws Exception
+     */
     public void day5Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisWeekdayAppointments(5));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of week day to filter appointment on
+     * @throws Exception
+     */
     public void day6Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisWeekdayAppointments(6));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of week day to filter appointment on
+     * @throws Exception
+     */
     public void day7Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisWeekdayAppointments(7));
     }
 
+    /**
+     *
+     * @param actionEvent load filter by month scene
+     * @throws IOException
+     */
     public void ViewByMonth_Button(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/ViewByMonth.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
@@ -116,6 +159,11 @@ public class ViewByWeekController  implements Initializable {
         stage.show();
     }
 
+    /**
+     *
+     * @param actionEvent load main scene
+     * @throws IOException
+     */
     public void BacktoMain_Button(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();

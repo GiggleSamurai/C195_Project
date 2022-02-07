@@ -1,10 +1,12 @@
+/**
+ * @class MainController.java
+ * @author Louis Wong
+ */
+
 package Controller;
 
 import DAO.UserDaoImpl;
-import Model.All_Appointments;
-import Model.All_Customers;
-import Model.Appointment;
-import Model.Customer;
+import Model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,11 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 
@@ -47,9 +46,10 @@ public class MainController  implements Initializable {
     public static Appointment selectedAppointment;
 
     /**
-     * Initialize when main form FXML is load
+     * Initialize elements when this FXML form is load
      */
     public void initialize(URL location, ResourceBundle resources){
+
         try {
             UserDaoImpl.SqlAllCustomers();
             UserDaoImpl.SqlAllAppointments();
@@ -81,16 +81,24 @@ public class MainController  implements Initializable {
 
     }
 
+    /**
+     *
+     * @param actionEvent load customer add scene
+     * @throws IOException
+     */
     public void AddCustomerButton(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/CustomerAdd.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-        //stage.setX(450);
-        //stage.setY(150);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
 
+    /**
+     *
+     * @param actionEvent load update customer scene
+     * @throws IOException
+     */
     public void UpdateCustomerButton(ActionEvent actionEvent) throws IOException {
 
         selectedCustomer = (Customer) CustomersTable.getSelectionModel().getSelectedItem();
@@ -99,14 +107,17 @@ public class MainController  implements Initializable {
         } else {
             Parent root = FXMLLoader.load(getClass().getResource("/View/CustomerUpdate.fxml"));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            //stage.setX(450);
-            //stage.setY(150);
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
         }
     }
 
+    /**
+     *
+     * @param actionEvent delete customer if there is no appointment, otherwise pop an alert
+     * @throws Exception
+     */
     public void DeleteCustomerButton(ActionEvent actionEvent) throws Exception {
         Customer SelectedCustomer = (Customer) CustomersTable.getSelectionModel().getSelectedItem();
 
@@ -119,30 +130,53 @@ public class MainController  implements Initializable {
             alert.setHeaderText("Delete");
             alert.setContentText("Do you want to delete this customer?");
             if (alert.showAndWait().get()== ButtonType.OK) {
-                UserDaoImpl.SqlDeleteCustomer(SelectedCustomer);
+                boolean hasAppointment = false;
+                for (Appointment thisAppointment : All_Appointments.getAllAppointments()){
+                    if (SelectedCustomer.getCustomer_Id() == thisAppointment.getCustomer_Id()){
+                        hasAppointment = true;
 
-                Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                stage.setX(450);
-                stage.setY(150);
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                    }
+                }
+                if (hasAppointment == false) {
+                    UserDaoImpl.SqlDeleteCustomer(SelectedCustomer);
+
+                    Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
+                    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                    stage.setX(450);
+                    stage.setY(150);
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } else{
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Delete Error");
+                    errorAlert.setHeaderText("Customer Delete Error");
+                    errorAlert.setContentText("Cannot delete customer with appointment.");
+                    errorAlert.show();
+                }
 
             } else {return;}
         }
     }
 
+    /**
+     *
+     * @param actionEvent load add appointment scene
+     * @throws IOException
+     */
     public void AddAppointmentButton(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/AppointmentAdd.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-        //stage.setX(450);
-        //stage.setY(150);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
 
+    /**
+     *
+     * @param actionEvent load update appointment scene
+     * @throws IOException
+     */
     public void UpdateAppointmentButton(ActionEvent actionEvent) throws IOException {
         selectedAppointment = (Appointment) AppointmentsTable.getSelectionModel().getSelectedItem();
         if (selectedAppointment == null) {
@@ -150,8 +184,6 @@ public class MainController  implements Initializable {
         } else {
             Parent root = FXMLLoader.load(getClass().getResource("/View/AppointmentUpdate.fxml"));
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            //stage.setX(450);
-            //stage.setY(150);
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -159,6 +191,11 @@ public class MainController  implements Initializable {
         }
     }
 
+    /**
+     *
+     * @param actionEvent delete appointment if no error
+     * @throws Exception
+     */
     public void DeleteAppointmentButton(ActionEvent actionEvent) throws Exception {
         Appointment SelectedAppointment = (Appointment) AppointmentsTable.getSelectionModel().getSelectedItem();
 
@@ -186,6 +223,11 @@ public class MainController  implements Initializable {
 
     }
 
+    /**
+     *
+     * @param actionEvent load view schedules scene
+     * @throws IOException
+     */
     public void View_Schedules_Button(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/ViewByMonth.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -196,14 +238,57 @@ public class MainController  implements Initializable {
         stage.show();
     }
 
-    public void ReportButton(ActionEvent actionEvent) {
+    /**
+     *
+     * @param actionEvent get report on information alert
+     * @throws IOException
+     */
+    public void ReportButton(ActionEvent actionEvent) throws IOException {
 
         System.out.println(All_Appointments.getMonthReport());
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Report");
         alert.setHeaderText("Report");
-
-        alert.setContentText(All_Appointments.getMonthReport() + "\n"+ All_Appointments.getTypeReport());
+        alert.getDialogPane().setPrefSize(800,800);
+        alert.setContentText(All_Appointments.getTypeReport() +
+                "\n\n"+ All_Appointments.getMonthReport()+
+                "\n\n"+ All_Appointments.getContactReport()+
+                "\n\n"+ "-------------------- Last 10 Login Activity --------------------" +getLastLoginData(10)
+                );
         alert.show();
     }
+
+    /**
+     *
+     * @param lastNumberOfLine number of line last login wanted
+     * @return string of login data
+     * @throws IOException
+     */
+    public static String getLastLoginData(int lastNumberOfLine) throws IOException {
+        File login_log = new File("login_activity.txt");
+        BufferedReader br = new BufferedReader(new FileReader(login_log));
+        String longString = "";
+
+        String line = br.readLine();
+        while (line != null) {
+            longString += "\n" + line;
+            line = br.readLine();
+        }
+
+        String[] stringArray = longString.split("\n");
+        String outputString = "";
+
+        for (int i = 1; i < lastNumberOfLine+1; i++) {
+            try{
+                if (stringArray[stringArray.length - i] != null){
+                    outputString += "\n" + stringArray[stringArray.length - i];
+                }
+            } catch (Exception e){
+                break;
+            }
+        }
+        return outputString;
+    }
+
+
 }

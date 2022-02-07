@@ -1,10 +1,11 @@
+/**
+ * @class Appointment.java
+ * @author Louis Wong
+ */
 package Model;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
-import java.util.Date;
+
 
 public class Appointment {
     private int appointment_id;
@@ -172,6 +173,11 @@ public class Appointment {
         this.user_id =  user_id;
     }
 
+    /**
+     *
+     * @param setStartDateTime the start datetime
+     * @return boolean statement if is overlap this appointment
+     */
     public boolean isOverlap(LocalDateTime setStartDateTime) {
         if (setStartDateTime.isAfter(start_datetime) && setStartDateTime.isBefore(end_datetime) || setStartDateTime.equals(start_datetime)) {
             return true;

@@ -1,3 +1,7 @@
+/**
+ * @class CustomerAddController.java
+ * @author Louis Wong
+ */
 
 package Controller;
 
@@ -24,6 +28,11 @@ public class CustomerAddController implements Initializable {
     public ComboBox DivisionIdComboBox;
     public First_Division selectedDivision;
 
+    /**
+     *
+     * @param actionEvent save the customer to SQL & load main scene if no error
+     * @throws Exception
+     */
     public void SaveButton(ActionEvent actionEvent) throws Exception {
         selectedDivision = (First_Division) DivisionIdComboBox.getSelectionModel().getSelectedItem();
         System.out.println(selectedDivision.getDivision_Id());
@@ -42,6 +51,11 @@ public class CustomerAddController implements Initializable {
         stage.show();
     }
 
+    /**
+     *
+     * @param actionEvent Load main scene
+     * @throws IOException
+     */
     public void CancelButton(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
@@ -52,6 +66,9 @@ public class CustomerAddController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Initialize elements when this FXML form is load
+     */
     public void initialize(URL location, ResourceBundle resources){
         try {
             UserDaoImpl.SqlAllFirst_Division();

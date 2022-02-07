@@ -1,8 +1,12 @@
+/**
+ * @class CustomerLoginController.java
+ * @author Louis Wong
+ */
+
 package Controller;
 
 import DAO.UserDaoImpl;
 import Model.All_Appointments;
-import Model.Appointment;
 import Model.User;
 import Utility.UserLanguage;
 import javafx.event.ActionEvent;
@@ -34,6 +38,11 @@ public class LoginController implements Initializable {
     public static Timestamp loginUTCTime;
     public static LocalDateTime loginLocalTime;
 
+    /**
+     *
+     * @param actionEvent load main scene if username & password are correct, else pop an alert
+     * @throws Exception
+     */
     public void LoginButton(ActionEvent actionEvent) throws Exception, IOException {
 
         User LoginUser = new User(0000000, UsernameTextField.getText(), PasswordTextField.getText());
@@ -49,12 +58,10 @@ public class LoginController implements Initializable {
             textFile.close();
 
             Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
-           // Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setX(450);
             stage.setY(150);
             Scene scene = new Scene(root);
-            //scene.set
             stage.setScene(scene);
             stage.show();
 
@@ -97,6 +104,10 @@ public class LoginController implements Initializable {
             alert.showAndWait();
         }
     }
+
+    /**
+     * Initialize elements when this FXML form is load
+     */
     public void initialize(URL location, ResourceBundle resources){
 
         TimeZone.setText(UserLanguage.rb.getString(ZoneId.systemDefault().toString()));
@@ -106,11 +117,13 @@ public class LoginController implements Initializable {
 
     }
 
+    /**
+     *
+     * @param actionEvent login by pressing enter on keyboard
+     * @throws Exception
+     */
     public void PasswordEnter(ActionEvent actionEvent) throws Exception {
         LoginButton(actionEvent);
     }
 
-    /*public static Instant getLoginUTCTime(){
-        return loginUTCTime;
-    }*/
 }

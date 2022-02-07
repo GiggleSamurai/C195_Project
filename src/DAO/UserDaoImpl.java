@@ -1,9 +1,11 @@
+/**
+ * @class UserDaoImpl.java
+ * @author Louis Wong
+ */
+
 package DAO;
 
 import Model.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -16,62 +18,11 @@ import java.util.ArrayList;
 
 public class UserDaoImpl {
     private static String currentApplicationUser;
-    static boolean act;
-    /*
-    public static User getUser(String userName) throws SQLException, Exception{
-        // type is name or phone, value is the name or the phone #
-        DBConnection.makeConnection();
-        String sqlStatement="select * FROM users WHERE User_Name  = '" + userName+ "'";
-        //  String sqlStatement="select FROM address";
-        Query.makeQuery(sqlStatement);
-        User userResult;
-        ResultSet result=Query.getResult();
-        while(result.next()){
-            int userid=result.getInt("User_ID");
-            String userNameG=result.getString("User_Name");
-            String password=result.getString("Password");
-            userResult= new User(userid, userName, password);
-            return userResult;
-        }
-        DBConnection.closeConnection();
-        return null;
-    }
-    public static ObservableList<User> getAllUsers() throws SQLException, Exception{
-        ObservableList<User> allUsers= FXCollections.observableArrayList();
-        DBConnection.makeConnection();
-        String sqlStatement="select * from users";
-        Query.makeQuery(sqlStatement);
-        ResultSet result=Query.getResult();
-        while(result.next()){
-            int userid=result.getInt("User_ID");
-            String userNameG=result.getString("User_Name");
-            String password=result.getString("Password");
-            User userResult= new User(userid, userNameG, password);
-            allUsers.add(userResult);
 
-        }
-        DBConnection.closeConnection();
-        return allUsers;
-    }
-
-    public static void getQuery() throws SQLException, Exception{
-
-        DBConnection.makeConnection();
-        String sqlStatement="select * from users";
-        Query.makeQuery(sqlStatement);
-        ResultSet result=Query.getResult();
-        System.out.println(result.toString());
-        while(result.next()){
-            int userid = result.getInt("User_ID");
-            String userNameG=result.getString("User_Name");
-            String password=result.getString("Password");
-            System.out.println(userid);
-            System.out.println(userNameG);
-            System.out.println(password);
-        }
-        DBConnection.closeConnection();
-    }
-*/
+    /**
+     * @param checkThisUser login user
+     * @return boolean if user & password is correct
+     */
     public static boolean SqlCheckUser(User checkThisUser) throws SQLException, Exception{
 
         DBConnection.makeConnection();
@@ -114,6 +65,9 @@ public class UserDaoImpl {
 
     }
 
+    /**
+     * SQL query all customers
+     */
     public static void SqlAllCustomers() throws SQLException, Exception{
 
         DBConnection.makeConnection();
@@ -140,6 +94,9 @@ public class UserDaoImpl {
 
     }
 
+    /**
+     * SQL query all appointments & convert to user local time
+     */
     public static void SqlAllAppointments() throws SQLException, Exception{
 
         DBConnection.makeConnection();
@@ -147,8 +104,6 @@ public class UserDaoImpl {
         String sqlStatement= "SELECT * FROM appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID;";
         Query.makeQuery(sqlStatement);
         ResultSet result = Query.getResult();
-
-        //SELECT * FROM table1 appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID;
 
         All_Appointments.clearAllAppointments();
 
@@ -181,7 +136,17 @@ public class UserDaoImpl {
         DBConnection.closeConnection();
 
     }
-    //SqlInsertCustomer( String customer_name, String address, String postal_code, String phone, int division_id)
+
+
+    /**
+     *  SQL insert new customer to database table & refresh the UI table
+     * @param customer_name the customer name
+     * @param address the customer address
+     * @param postal_code the customer postal code
+     * @param phone the customer phone number
+     * @param division_id the first division ID
+     * @throws Exception
+     */
     public static void SqlInsertCustomer( String customer_name, String address, String postal_code, String phone, int division_id) throws Exception {
         DBConnection.makeConnection();
         String sqlStatement = "SELECT MAX(Customer_ID) FROM customers";
@@ -191,8 +156,7 @@ public class UserDaoImpl {
         while (result.next()) {
             maxUserId = result.getInt("MAX(Customer_ID)");
         }
-        System.out.println(String.valueOf(maxUserId + 1));
-        //currentApplicationUser ="hihi";
+
         sqlStatement = "INSERT INTO customers VALUES(" +
                         String.valueOf(maxUserId + 1) +
                         ", '" + customer_name + "'" +
@@ -206,18 +170,19 @@ public class UserDaoImpl {
                         ", " + String.valueOf(division_id) +
                         ")";
         Query.makeQuery(sqlStatement);
-
-        System.out.println(sqlStatement);
         All_Customers.refreshAllCustomers();
-      //  Query.makeQuery(sqlStatement);
+
     }
 
+    /**
+     *  SQL query all the first division ID & location name
+     * @throws Exception
+     */
     public static void SqlAllFirst_Division() throws Exception {
         DBConnection.makeConnection();
         String sqlStatement="select * from first_level_divisions";
         Query.makeQuery(sqlStatement);
         ResultSet result = Query.getResult();
-
         All_First_Division.clearAllFirst_Division();
 
         while(result.next()) {
@@ -233,6 +198,11 @@ public class UserDaoImpl {
 
     }
 
+    /**
+     *
+     * @param selectedCustomer customer to delete on SQL
+     * @throws Exception
+     */
     public static void SqlDeleteCustomer(Customer selectedCustomer) throws Exception {
         DBConnection.makeConnection();
         String sqlStatement = "delete from customers where Customer_Id = " + Integer.toString(selectedCustomer.getCustomer_Id());
@@ -242,7 +212,15 @@ public class UserDaoImpl {
     }
 
 
-
+    /**
+     *
+     * @param customer_name the customer name
+     * @param address the customer address
+     * @param postal_code the customer postal code
+     * @param phone the customer phone number
+     * @param division_id the first division ID
+     * @throws Exception
+     */
     public static void SqlUpdateCustomer( String customer_id,String customer_name, String address, String postal_code, String phone, int division_id) throws Exception {
         DBConnection.makeConnection();
 
@@ -261,6 +239,10 @@ public class UserDaoImpl {
     }
 
 
+    /**
+     *  SQL query all the contact from contacts table
+     * @throws Exception
+     */
     public static void SqlAllContact() throws Exception {
         DBConnection.makeConnection();
         String sqlStatement = "SELECT * FROM contacts";
@@ -280,17 +262,20 @@ public class UserDaoImpl {
         }
         DBConnection.closeConnection();
     }
-/*        private int appointment_id;
-        private String title;
-        private String description;
-        private String location;
-        private String contact_name;
-        private String type;
-        private LocalDateTime start_datetime;
-        private LocalDateTime end_datetime;
-        private int customer_id;
-        private user_id;*/
 
+    /**
+     *
+     * @param title the appointment title
+     * @param description the appointment description
+     * @param location the appointment location
+     * @param type the appointment type
+     * @param start_datetime the appointment start time
+     * @param end_datetime the appointment end time
+     * @param customer_id the appointment customer ID
+     * @param user_id the appointment user ID
+     * @param contact_id the appointment contact ID
+     * @throws Exception
+     */
     public static void SqlInsertAppointment(String title,
                                             String description,
                                             String location,
@@ -335,6 +320,11 @@ public class UserDaoImpl {
 
     }
 
+    /**
+     *
+     * @param selectedAppointment the appointment to delete
+     * @throws Exception
+     */
     public static void SqlDeleteAppointment(Appointment selectedAppointment) throws Exception {
         DBConnection.makeConnection();
         String sqlStatement = "DELETE FROM appointments WHERE Appointment_Id = " + Integer.toString(selectedAppointment.getAppointment_ID());
@@ -343,6 +333,12 @@ public class UserDaoImpl {
         DBConnection.closeConnection();
     }
 
+    /**
+     *
+     * @param customer_id the customer ID to check
+     * @return boolean statement if customer ID is in the database
+     * @throws Exception
+     */
     public static boolean SqlCheckCustomer_ID(Integer customer_id) throws Exception {
         DBConnection.makeConnection();
         String sqlStatement = "SELECT * FROM customers WHERE Customer_ID = " + Integer.toString(customer_id);
@@ -361,6 +357,12 @@ public class UserDaoImpl {
         }
     }
 
+    /**
+     *
+     * @param user_id the user ID
+     * @return boolean statement if user ID is in the database
+     * @throws Exception
+     */
     public static boolean SqlCheckUser_ID(Integer user_id) throws Exception {
         DBConnection.makeConnection();
         String sqlStatement = "SELECT * FROM users WHERE User_ID = " + Integer.toString(user_id);
@@ -381,6 +383,19 @@ public class UserDaoImpl {
         }
     }
 
+    /**
+     *
+     * @param title the appointment title
+     * @param description the appointment description
+     * @param location the appointment location
+     * @param type the appointment type
+     * @param start_utcDatetime the appointment start time
+     * @param end_utcDatetime the appointment end time
+     * @param customer_id the appointment customer ID
+     * @param user_id the appointment user ID
+     * @param contact_id the appointment contact ID
+     * @throws Exception
+     */
     public static void SqlUpdateAppointment(int appointment_id, String title, String description, String location, String type, LocalDateTime start_utcDatetime, LocalDateTime end_utcDatetime, int customer_id, int user_id, int contact_id) throws Exception {
 
         DBConnection.makeConnection();
@@ -403,5 +418,6 @@ public class UserDaoImpl {
         Query.makeQuery(sqlStatement);
         All_Appointments.refreshAllAppointments();
     }
+
 }
 

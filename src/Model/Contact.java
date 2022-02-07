@@ -1,3 +1,8 @@
+/**
+ * @class Contact.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 public class Contact {
@@ -39,7 +44,10 @@ public class Contact {
         this.contact_name =  contact_name;
     }
 
-
+    /**
+     *
+     * @return override the string method, to display properly in the combo box
+     */
     @Override
     public String toString() {
         return ("#" + Integer.toString(contact_id) + " " + contact_name);

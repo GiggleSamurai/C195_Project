@@ -1,6 +1,10 @@
+/**
+ * @class DisplayTime.java
+ * @author Louis Wong
+ */
+
 package Utility;
 
-import Model.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -14,20 +18,30 @@ public class DisplayTime {
     private static ObservableList<String> allMinutes = FXCollections.observableArrayList();
     private static ObservableList<String> theAMorPM = FXCollections.observableArrayList();
 
-    //  hours.addAll("0", "1", "2", "3", "04", "05", "06", "07", "08", "9", "10", "11",
-      //          "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23");
+    /**
+     *
+     * @return list of all the hours in 12 hour system
+     */
     public static ObservableList<String> getAllHours() {
         allHours.clear();
         allHours.addAll( "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11","12");
         return allHours;
     }
 
+    /**
+     *
+     * @return list of all the minutes available for appointment
+     */
     public static ObservableList<String> getAllMinutes() {
         allMinutes.clear();
         allMinutes.addAll("00", "15", "30", "45");
         return allMinutes;
     }
 
+    /**
+     *
+     * @return list of just AM & PM
+     */
     public static ObservableList<String> getAMorPM() {
         theAMorPM.clear();
         theAMorPM.addAll( "AM", "PM");
@@ -39,6 +53,12 @@ public class DisplayTime {
         return minValue;
     }
 
+    /**
+     *
+     * @param hour hour to convert
+     * @param AmOrPm if AM or PM to convert
+     * @return the 12 hour formatted integer
+     */
     public static Integer getHourInt(String hour, String AmOrPm) {
 
         if (AmOrPm.equals("AM")){
@@ -51,12 +71,14 @@ public class DisplayTime {
                 return thisHour;
             }
 
-           /* LocalDateTime ldt = LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(), Integer.parseInt(hour), Integer.parseInt(minute));
-            ZonedDateTime locZdt = ZonedDateTime.of(ldt, ZoneId.systemDefault());
-            ZonedDateTime utcZdt = locZdt.withZoneSameInstant(ZoneOffset.UTC);*/
         }
     }
 
+    /**
+     *
+     * @param userTime user time
+     * @return converted UTC time
+     */
     public static LocalDateTime userTime2UTC(LocalDateTime userTime) {
         ZonedDateTime userZoneTime = ZonedDateTime.of(userTime, ZoneId.systemDefault());
         ZonedDateTime utcZoneTime = userZoneTime.withZoneSameInstant(ZoneOffset.UTC);
@@ -64,6 +86,12 @@ public class DisplayTime {
         return utcTime;
     }
 
+    /**
+     *
+     * @param StartUTCDateTime the appointment start UTC time
+     * @param EndUTCDateTime the appointment end UTC time
+     * @return boolean statement if is in business hour or not
+     */
     public static boolean inBusinessHours(LocalDateTime StartUTCDateTime, LocalDateTime EndUTCDateTime) {
         int StartHour = StartUTCDateTime.getHour();
         int EndHour = EndUTCDateTime.getHour();

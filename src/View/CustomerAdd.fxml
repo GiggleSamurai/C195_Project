@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerAddController">
    <children>
       <HBox layoutX="34.0" layoutY="62.0" prefHeight="366.0" prefWidth="333.0">
@@ -66,6 +65,5 @@
             <Button mnemonicParsing="false" onAction="#CancelButton" text="Cancel" />
          </children>
       </HBox>
-      <Label layoutX="34.0" layoutY="428.0" text="Message..." wrapText="true" />
    </children>
 </AnchorPane>

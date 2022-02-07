@@ -65,6 +65,5 @@
                 <Button mnemonicParsing="false" onAction="#CancelButton" text="Cancel" />
             </children>
         </HBox>
-        <Label layoutX="34.0" layoutY="428.0" text="Message..." wrapText="true" />
     </children>
 </AnchorPane>

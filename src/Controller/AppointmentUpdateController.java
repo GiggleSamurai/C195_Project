@@ -1,3 +1,8 @@
+/**
+ * @class AppointmentUpdateController.java
+ * @author Louis Wong
+ */
+
 package Controller;
 
 import DAO.UserDaoImpl;
@@ -15,7 +20,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ResourceBundle;
 
 public class AppointmentUpdateController implements Initializable {
@@ -36,12 +40,10 @@ public class AppointmentUpdateController implements Initializable {
     public TextField CustomerIdInput;
     public TextField UserIdInput;
 
-    public Contact selectedContact;
 
-    // NEED THE MAIN FORM SELECTION MODEL ON APPOINTMENT TABLE
-    // THE SELECTION OBJECT.GET METHOD TO GET ALL THE INFORMATION
-    // SET INPUT.setText(THE DATA )
-
+    /**
+     * Initialize elements when this FXML form is load
+     */
     public void initialize(URL location, ResourceBundle resources){
         StartHourComboBox.setItems(DisplayTime.getAllHours());
         EndHourComboBox.setItems(DisplayTime.getAllHours());
@@ -113,9 +115,13 @@ public class AppointmentUpdateController implements Initializable {
         ContactComboBox.getSelectionModel().selectFirst();
     }
 
+    /**
+     *
+     * @param actionEvent save the appointment to SQL & load main scene if no error
+     * @throws Exception
+     */
     public void SaveButton(ActionEvent actionEvent) throws Exception {
         try {
-           // selectedContact = (Contact) ContactComboBox.getSelectionModel().getSelectedItem();
 
             String title = TitleInput.getText();
             String description = DescriptionInput.getText();
@@ -173,6 +179,11 @@ public class AppointmentUpdateController implements Initializable {
 
     }
 
+    /**
+     *
+     * @param actionEvent load main scene
+     * @throws IOException
+     */
     public void CancelButton(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
@@ -216,7 +227,7 @@ public class AppointmentUpdateController implements Initializable {
 
         // Check if Time Greater
         if (userSelectEndTime.isAfter(userSelectStartTime)){
-            // IT'S GOOD
+            // It's good
         } else {
             String message = "End time must be greater than start time.";
             errorMessage += "\n"+message;
@@ -224,7 +235,7 @@ public class AppointmentUpdateController implements Initializable {
 
         // Check if Overlap
         if (All_Appointments.checkCustomerAppointmentsWithoutThis(customer_id,userSelectStartTime,appointment_id) == true) {
-            // IT'S GOOD
+            // It's good
         }
         else {
             String message = "The appointment is overlap with other appointment.";
@@ -233,7 +244,7 @@ public class AppointmentUpdateController implements Initializable {
 
         // Check if in Business Hours
         if (DisplayTime.inBusinessHours(start_utcDatetime,end_utcDatetime)==true){
-            // IT'S GOOD
+            // It's good
         } else {
             String message = "The appointment is not in business hours (EST. 8AM - 10PM ).";
             errorMessage += "\n"+message;
@@ -242,6 +253,7 @@ public class AppointmentUpdateController implements Initializable {
         if (errorMessage.isEmpty()){
             return true;
         } else {
+            // Pop an alert
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Input Error");
             alert.setHeaderText("Input Error");

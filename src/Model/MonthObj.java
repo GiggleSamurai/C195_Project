@@ -1,3 +1,8 @@
+/**
+ * @class MonthObj.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 public class MonthObj {
@@ -14,6 +19,10 @@ public class MonthObj {
     private static int nov = 0;
     private static int dec = 0;
 
+    /**
+     *
+     * @param month the month that add to
+     */
     public static void add1to(int month){
         if (month == 1){
             jan += 1;
@@ -53,6 +62,9 @@ public class MonthObj {
         }
     }
 
+    /**
+     * clear the count to 0
+     */
     public static void clearCount(){
         jan = 0;
         feb = 0;
@@ -68,8 +80,12 @@ public class MonthObj {
         dec = 0;
     }
 
+    /**
+     *
+     * @return string of counted report
+     */
     public static String getResult(){
-        String resultString = "Total Numbers of Customer Appointment By Month:";
+        String resultString = "-------------------- Total Numbers of Customer Appointment By Month --------------------";
         resultString += "\nJanuary: " + Integer.toString(jan);
         resultString += "\nFebruary: " + Integer.toString(feb);
         resultString += "\nMarch: " + Integer.toString(mar);

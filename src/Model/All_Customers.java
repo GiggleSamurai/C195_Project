@@ -1,3 +1,8 @@
+/**
+ * @class All_Customers.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 import DAO.UserDaoImpl;

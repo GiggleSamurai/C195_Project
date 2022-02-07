@@ -1,3 +1,8 @@
+/**
+ * @class First_Division.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 public class First_Division {
@@ -39,7 +44,10 @@ public class First_Division {
         this.division =  division;
     }
 
-
+    /**
+     *
+     * @return override the string method, to display properly in the combo box
+     */
     @Override
     public String toString() {
         return ("#" + Integer.toString(division_id) + " " + division);

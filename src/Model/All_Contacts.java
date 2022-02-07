@@ -1,3 +1,8 @@
+/**
+ * @class All_Contacts.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 import DAO.UserDaoImpl;
@@ -41,6 +46,11 @@ public class All_Contacts {
         UserDaoImpl.SqlAllContact();
     }
 
+    /**
+     *
+     * @param ContactID the contact ID
+     * @return the index of the contact
+     */
     public static int lookupContact(int ContactID) {
         int ContactArrayIndex = -1;
 

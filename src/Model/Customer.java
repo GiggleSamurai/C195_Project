@@ -1,3 +1,8 @@
+/**
+ * @class Customer.java
+ * @author Louis Wong
+ */
+
 package Model;
 
 public class Customer {

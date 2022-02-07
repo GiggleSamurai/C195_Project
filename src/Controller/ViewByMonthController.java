@@ -1,3 +1,8 @@
+/**
+ * @class ViewByMonthController.java
+ * @author Louis Wong
+ */
+
 package Controller;
 
 import DAO.UserDaoImpl;
@@ -38,7 +43,7 @@ public class ViewByMonthController  implements Initializable {
     public ToggleGroup MonthRadioGroup;
 
     /**
-     * Initialize when main form FXML is load
+     * Initialize elements when this FXML form is load
      */
     public void initialize(URL location, ResourceBundle resources){
         try {
@@ -67,65 +72,119 @@ public class ViewByMonthController  implements Initializable {
 
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon1Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(1));
-
-        Appointment_ID.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
-        Title.setCellValueFactory(new PropertyValueFactory<>("title"));
-        Description.setCellValueFactory(new PropertyValueFactory<>("description"));
-        Location.setCellValueFactory(new PropertyValueFactory<>("location"));
-        Contact.setCellValueFactory(new PropertyValueFactory<>("contact_Name"));
-        Type.setCellValueFactory(new PropertyValueFactory<>("type"));
-        Start.setCellValueFactory(new PropertyValueFactory<>("start_Datetime"));
-        End.setCellValueFactory(new PropertyValueFactory<>("end_Datetime"));
-        appointmentCustomer_ID.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
-        User_ID.setCellValueFactory(new PropertyValueFactory<>("user_Id"));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon2Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(2));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon3Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(3));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon4Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(4));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon5Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(5));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon6Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(6));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon7Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(7));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon8Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(8));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon9Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(9));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon10Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(10));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon11Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(11));
     }
 
+    /**
+     *
+     * @param actionEvent radio button of month to filter appointment on
+     * @throws Exception
+     */
     public void mon12Button(ActionEvent actionEvent) throws Exception {
         AppointmentsTable.setItems(All_Appointments.getThisMonthAppointments(12));
     }
 
+    /**
+     *
+     * @param actionEvent load filter by week scene
+     * @throws IOException
+     */
     public void ViewByWeeK_Button(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/ViewByWeek.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
@@ -136,6 +195,11 @@ public class ViewByMonthController  implements Initializable {
         stage.show();
     }
 
+    /**
+     *
+     * @param actionEvent load main scene
+     * @throws IOException
+     */
     public void BacktoMain_Button(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
         Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
