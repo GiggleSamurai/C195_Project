@@ -16,7 +16,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception{
 
-        if (Locale.getDefault().equals("fr")){
+        if (Locale.getDefault().getLanguage().equals("fr")){
             UserLanguage.setLanguage(Locale.FRENCH);
         } else {
             UserLanguage.setLanguage(Locale.ENGLISH);
