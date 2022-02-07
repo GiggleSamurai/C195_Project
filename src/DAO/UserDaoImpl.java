@@ -40,26 +40,22 @@ public class UserDaoImpl {
             userNameList.add(userName);
             passwordList.add(password);
 
-            System.out.println(userName);
-            System.out.println(password);
         }
         DBConnection.closeConnection();
 
         if (userNameList.contains(checkThisUserName)) {
-            System.out.println("VALID USER");
-            System.out.println(userNameList.indexOf(checkThisUserName));
+            //VALID USER
             int listIndex = userNameList.indexOf(checkThisUserName);
             if (passwordList.get(listIndex).equals(checkThisPassword)){
                 currentApplicationUser = checkThisUserName;
-                System.out.println("CORRECT PASSWORD");
                 return true;
             } else{
-                System.out.println("INCORRECT PASSWORD");
+                //INCORRECT PASSWORD
                 return false;
             }
 
         } else{
-            System.out.println("INVALID USER");
+            // INVALID USER
             return false;
         }
 
@@ -294,7 +290,7 @@ public class UserDaoImpl {
         while (result.next()) {
             maxAppointmentId = result.getInt("MAX(Appointment_ID)");
         }
-        System.out.println(maxAppointmentId);
+
         sqlStatement = "INSERT INTO appointments VALUES(" +
                 String.valueOf(maxAppointmentId + 1) +
                 ", '" + title + "'" +

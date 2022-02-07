@@ -49,7 +49,6 @@ public class LoginController implements Initializable {
         boolean checkLogin = UserDaoImpl.SqlCheckUser(LoginUser);
         if (checkLogin == true){
 
-            System.out.println("You can login");
             loginUTCTime = Timestamp.from(Instant.now());
             loginLocalTime = LocalDateTime.now();
 
@@ -87,7 +86,6 @@ public class LoginController implements Initializable {
 
         }
         else {
-            System.out.println("No Login");
             FileWriter textFile = new FileWriter("login_activity.txt", true);
             textFile.write("\nUser: "+ UsernameTextField.getText() + "    UTC_Date&Time_Stamp: "+loginUTCTime+"    Attempt: Fail");
             textFile.close();
@@ -107,14 +105,16 @@ public class LoginController implements Initializable {
 
     /**
      * Initialize elements when this FXML form is load
+     * @LambdaExpression void function for initializing element for login
      */
     public void initialize(URL location, ResourceBundle resources){
-
-        TimeZone.setText(UserLanguage.rb.getString(ZoneId.systemDefault().toString()));
-        UsernameLabel.setText(UserLanguage.rb.getString("username"));
-        PasswordLabel.setText(UserLanguage.rb.getString("password"));
-        LoginLabel.setText(UserLanguage.rb.getString("login"));
-
+        FunctionalInterface loginInitialize = ()-> {
+            TimeZone.setText(UserLanguage.rb.getString(ZoneId.systemDefault().toString()));
+            UsernameLabel.setText(UserLanguage.rb.getString("username"));
+            PasswordLabel.setText(UserLanguage.rb.getString("password"));
+            LoginLabel.setText(UserLanguage.rb.getString("login"));
+        };
+        loginInitialize.initializeLambda();
     }
 
     /**

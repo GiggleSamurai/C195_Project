@@ -119,7 +119,9 @@ public class All_Appointments {
 
     /**
      *
-     * @return sadasdasdasdsadasdasdddddddddddddddddddddddddddddddddddddddddd
+     * @param month month to check
+     * @return all appointment in this month
+     * @throws Exception
      */
     public static ObservableList<Appointment> getThisMonthAppointments(int month) throws Exception {
         thisMonthAppointments.clear();
@@ -133,7 +135,9 @@ public class All_Appointments {
 
     /**
      *
-     * @return sadasdasdasdsadasdasdddddddddddddddddddddddddddddddddddddddddd
+     * @param weekday the weekday to check
+     * @return all the appointment in this weekday
+     * @throws Exception
      */
     public static ObservableList<Appointment> getThisWeekdayAppointments(int weekday) throws Exception {
         thisWeekdayAppointments.clear();
@@ -145,10 +149,13 @@ public class All_Appointments {
         return thisWeekdayAppointments;
     }
 
+    /**
+     *
+     * @return string contain report of by all month
+     */
     public static String getMonthReport(){
         MonthObj.clearCount();
         for(int i = 1; i < 13; i++){
-            System.out.println(i);
             for(Appointment thisAppointment : allAppointments){
                 if (thisAppointment.getStart_Datetime().getMonth().getValue() == i) {
                     MonthObj.add1to(i);
@@ -162,6 +169,10 @@ public class All_Appointments {
     private static ObservableList<String> nonUniqueListType = FXCollections.observableArrayList();
     private static ObservableList<String> UniqueListType = FXCollections.observableArrayList();
 
+    /**
+     *
+     * @return string contain report of by all type
+     */
     public static String getTypeReport(){
         nonUniqueListType.clear();
         UniqueListType.clear();
@@ -192,6 +203,10 @@ public class All_Appointments {
     private static ObservableList<String> nonUniqueListContact = FXCollections.observableArrayList();
     private static ObservableList<String> UniqueListContact = FXCollections.observableArrayList();
 
+    /**
+     *
+     * @return string contain report of by contact
+     */
     public static String getContactReport(){
         nonUniqueListContact.clear();
         UniqueListContact.clear();
@@ -222,7 +237,6 @@ public class All_Appointments {
                 }
             }
         }
-
 
         return resultString;
     }

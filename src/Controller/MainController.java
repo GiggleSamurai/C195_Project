@@ -47,37 +47,38 @@ public class MainController  implements Initializable {
 
     /**
      * Initialize elements when this FXML form is load
+     * @LambdaExpression void function for initializing element for main scene
      */
     public void initialize(URL location, ResourceBundle resources){
+        FunctionalInterface mainInitialize = ()-> {
+            try {
+                UserDaoImpl.SqlAllCustomers();
+                UserDaoImpl.SqlAllAppointments();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            CustomersTable.setItems(All_Customers.getAllCustomers());
+            Customer_ID.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
+            Customer_Name.setCellValueFactory(new PropertyValueFactory<>("customer_Name"));
+            Address.setCellValueFactory(new PropertyValueFactory<>("address"));
+            Postal_Code.setCellValueFactory(new PropertyValueFactory<>("postal_Code"));
+            Phone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            Division_ID.setCellValueFactory(new PropertyValueFactory<>("division_Id"));
 
-        try {
-            UserDaoImpl.SqlAllCustomers();
-            UserDaoImpl.SqlAllAppointments();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        CustomersTable.setItems(All_Customers.getAllCustomers());
-        Customer_ID.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
-        Customer_Name.setCellValueFactory(new PropertyValueFactory<>("customer_Name"));
-        Address.setCellValueFactory(new PropertyValueFactory<>("address"));
-        Postal_Code.setCellValueFactory(new PropertyValueFactory<>("postal_Code"));
-        Phone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        Division_ID.setCellValueFactory(new PropertyValueFactory<>("division_Id"));
+            AppointmentsTable.setItems(All_Appointments.getAllAppointments());
+            Appointment_ID.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
+            Title.setCellValueFactory(new PropertyValueFactory<>("title"));
+            Description.setCellValueFactory(new PropertyValueFactory<>("description"));
+            Location.setCellValueFactory(new PropertyValueFactory<>("location"));
+            Contact.setCellValueFactory(new PropertyValueFactory<>("contact_Name"));
+            Type.setCellValueFactory(new PropertyValueFactory<>("type"));
+            Start.setCellValueFactory(new PropertyValueFactory<>("start_Datetime"));
+            End.setCellValueFactory(new PropertyValueFactory<>("end_Datetime"));
+            appointmentCustomer_ID.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
+            User_ID.setCellValueFactory(new PropertyValueFactory<>("user_Id"));
+        };
 
-        AppointmentsTable.setItems(All_Appointments.getAllAppointments());
-        Appointment_ID.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
-        Title.setCellValueFactory(new PropertyValueFactory<>("title"));
-        Description.setCellValueFactory(new PropertyValueFactory<>("description"));
-        Location.setCellValueFactory(new PropertyValueFactory<>("location"));
-        Contact.setCellValueFactory(new PropertyValueFactory<>("contact_Name"));
-        Type.setCellValueFactory(new PropertyValueFactory<>("type"));
-        Start.setCellValueFactory(new PropertyValueFactory<>("start_Datetime"));
-        End.setCellValueFactory(new PropertyValueFactory<>("end_Datetime"));
-        appointmentCustomer_ID.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
-        User_ID.setCellValueFactory(new PropertyValueFactory<>("user_Id"));
-
-
-
+        mainInitialize.initializeLambda();
 
     }
 
@@ -245,7 +246,6 @@ public class MainController  implements Initializable {
      */
     public void ReportButton(ActionEvent actionEvent) throws IOException {
 
-        System.out.println(All_Appointments.getMonthReport());
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Report");
         alert.setHeaderText("Report");
