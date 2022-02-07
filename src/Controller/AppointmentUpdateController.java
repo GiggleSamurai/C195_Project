@@ -1,9 +1,7 @@
 package Controller;
 
 import DAO.UserDaoImpl;
-import Model.All_Appointments;
-import Model.All_Contacts;
-import Model.Contact;
+import Model.*;
 import Utility.DisplayTime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +18,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ResourceBundle;
 
-public class AppointmentAddController implements Initializable {
+public class AppointmentUpdateController implements Initializable {
+    public TextField AppointmentIdInput;
     public TextField TitleInput;
     public TextField DescriptionInput;
     public TextField LocationInput;
@@ -39,6 +38,9 @@ public class AppointmentAddController implements Initializable {
 
     public Contact selectedContact;
 
+    // NEED THE MAIN FORM SELECTION MODEL ON APPOINTMENT TABLE
+    // THE SELECTION OBJECT.GET METHOD TO GET ALL THE INFORMATION
+    // SET INPUT.setText(THE DATA )
 
     public void initialize(URL location, ResourceBundle resources){
         StartHourComboBox.setItems(DisplayTime.getAllHours());
@@ -47,14 +49,59 @@ public class AppointmentAddController implements Initializable {
         EndMinComboBox.setItems(DisplayTime.getAllMinutes());
         StartAmPmComboBox.setItems(DisplayTime.getAMorPM());
         EndAmPmComboBox.setItems(DisplayTime.getAMorPM());
-        StartHourComboBox.getSelectionModel().selectFirst();
-        EndHourComboBox.getSelectionModel().selectFirst();
-        StartMinComboBox.getSelectionModel().selectFirst();
-        EndMinComboBox.getSelectionModel().selectFirst();
-        StartAmPmComboBox.getSelectionModel().selectFirst();
-        EndAmPmComboBox.getSelectionModel().selectFirst();
-        StartDatePicker.setValue(LocalDate.now(ZoneId.systemDefault()));
-        EndDatePicker.setValue(LocalDate.now(ZoneId.systemDefault()));
+
+        AppointmentIdInput.setText(Integer.toString(MainController.selectedAppointment.getAppointment_ID()));
+        TitleInput.setText(MainController.selectedAppointment.getTitle());
+        DescriptionInput.setText(MainController.selectedAppointment.getDescription());
+        LocationInput.setText(MainController.selectedAppointment.getLocation());
+        TypeInput.setText(MainController.selectedAppointment.getType());
+        CustomerIdInput.setText(Integer.toString(MainController.selectedAppointment.getCustomer_Id()));
+        UserIdInput.setText(Integer.toString(MainController.selectedAppointment.getUser_Id()));
+
+        LocalDateTime loadStartDateTime = MainController.selectedAppointment.getStart_Datetime();
+        LocalDateTime loadEndDateTime = MainController.selectedAppointment.getEnd_Datetime();
+
+        if (loadStartDateTime.getHour()>=12){
+            if (loadStartDateTime.getHour()==12){
+                StartHourComboBox.getSelectionModel().select("12");
+                StartAmPmComboBox.getSelectionModel().select("PM");
+            } else {
+                StartHourComboBox.getSelectionModel().select(Integer.toString(loadStartDateTime.getHour()-12));
+                StartAmPmComboBox.getSelectionModel().select("PM");
+            }
+
+        } else {
+            StartAmPmComboBox.getSelectionModel().select("AM");
+            StartHourComboBox.getSelectionModel().select(Integer.toString(loadStartDateTime.getHour()));
+        }
+
+        if (loadStartDateTime.getMinute() == 0) {
+            StartMinComboBox.getSelectionModel().select("00");
+        } else{
+            StartMinComboBox.getSelectionModel().select(Integer.toString(loadStartDateTime.getMinute()));
+        }
+        if (loadEndDateTime.getHour()>=12){
+            if (loadEndDateTime.getHour()==12){
+                EndHourComboBox.getSelectionModel().select("12");
+                EndAmPmComboBox.getSelectionModel().select("PM");
+            } else {
+                EndHourComboBox.getSelectionModel().select(Integer.toString(loadEndDateTime.getHour()-12));
+                EndAmPmComboBox.getSelectionModel().select("PM");
+            }
+
+        } else {
+            EndAmPmComboBox.getSelectionModel().select("AM");
+            EndHourComboBox.getSelectionModel().select(Integer.toString(loadEndDateTime.getHour()));
+        }
+
+        if (loadEndDateTime.getMinute() == 0) {
+            EndMinComboBox.getSelectionModel().select("00");
+        } else{
+            EndMinComboBox.getSelectionModel().select(Integer.toString(loadEndDateTime.getMinute()));
+        }
+
+        StartDatePicker.setValue(loadStartDateTime.toLocalDate());
+        EndDatePicker.setValue(loadEndDateTime.toLocalDate());
 
         try {
             UserDaoImpl.SqlAllContact();
@@ -68,7 +115,7 @@ public class AppointmentAddController implements Initializable {
 
     public void SaveButton(ActionEvent actionEvent) throws Exception {
         try {
-            selectedContact = (Contact) ContactComboBox.getSelectionModel().getSelectedItem();
+           // selectedContact = (Contact) ContactComboBox.getSelectionModel().getSelectedItem();
 
             String title = TitleInput.getText();
             String description = DescriptionInput.getText();
@@ -92,10 +139,12 @@ public class AppointmentAddController implements Initializable {
             int contact_id = ((Contact) ContactComboBox.getSelectionModel().getSelectedItem()).getContact_Id();
             int customer_id = Integer.parseInt(CustomerIdInput.getText());
             int user_id = Integer.parseInt(UserIdInput.getText());
+            int appointment_id = Integer.parseInt(AppointmentIdInput.getText());
 
-            //All_Appointments.
-            if(InputErrorCheck(customer_id, user_id, userSelectEndTime, userSelectStartTime, start_utcDatetime, end_utcDatetime)){
-                UserDaoImpl.SqlInsertAppointment(title,
+            if(InputErrorCheck(customer_id, user_id, userSelectEndTime, userSelectStartTime, start_utcDatetime, end_utcDatetime, appointment_id)){
+                UserDaoImpl.SqlUpdateAppointment(
+                        appointment_id,
+                        title,
                         description,
                         location,
                         type,
@@ -139,7 +188,7 @@ public class AppointmentAddController implements Initializable {
      * display text field to user on error message output label with text wrap
      * @return boolean of input text field error
      */
-    public boolean InputErrorCheck(int customer_id, int user_id, LocalDateTime userSelectEndTime, LocalDateTime userSelectStartTime, LocalDateTime start_utcDatetime, LocalDateTime end_utcDatetime) throws Exception {
+    public boolean InputErrorCheck(int customer_id, int user_id, LocalDateTime userSelectEndTime, LocalDateTime userSelectStartTime, LocalDateTime start_utcDatetime, LocalDateTime end_utcDatetime, int appointment_id) throws Exception {
         String errorMessage ="";
 
         // Customer ID check
@@ -174,13 +223,13 @@ public class AppointmentAddController implements Initializable {
         }
 
         // Check if Overlap
-        if (All_Appointments.checkCustomerAppointments(customer_id,userSelectStartTime) == true) {
+        if (All_Appointments.checkCustomerAppointmentsWithoutThis(customer_id,userSelectStartTime,appointment_id) == true) {
             // IT'S GOOD
         }
         else {
             String message = "The appointment is overlap with other appointment.";
             errorMessage += "\n"+message;
-            }
+        }
 
         // Check if in Business Hours
         if (DisplayTime.inBusinessHours(start_utcDatetime,end_utcDatetime)==true){

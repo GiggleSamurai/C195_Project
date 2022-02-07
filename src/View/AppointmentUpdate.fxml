@@ -1,14 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="View.AppointmentUpdate"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="600.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AppointmentUpdateController">
+    <children>
+        <HBox layoutX="34.0" layoutY="62.0" prefHeight="437.0" prefWidth="472.0">
+            <children>
+                <VBox prefHeight="366.0" prefWidth="152.0" spacing="20.0">
+                    <children>
+                        <Label text="Appointment ID">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label prefHeight="25.0" prefWidth="121.0" text="Title">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label text="Description">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label text="Location">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label text="Contact Name">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label text="Type">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label text="Start Date &amp; Time">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="235.0" text="End Date &amp; Time">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="280.0" text="Customer ID">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="10.0" layoutY="370.0" text="User ID">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <VBox prefHeight="372.0" prefWidth="319.0" spacing="20.0">
+                    <children>
+                        <TextField fx:id="AppointmentIdInput" disable="true" promptText="Auto Generated" />
+                        <TextField fx:id="TitleInput" />
+                        <TextField fx:id="DescriptionInput" />
+                        <TextField fx:id="LocationInput" />
+                        <ComboBox fx:id="ContactComboBox" prefHeight="19.0" prefWidth="358.0" />
+                        <TextField fx:id="TypeInput" />
+                        <HBox prefHeight="28.0" prefWidth="255.0" spacing="10.0">
+                            <children>
+                                <DatePicker fx:id="StartDatePicker" prefHeight="25.0" prefWidth="105.0" />
+                                <HBox prefHeight="28.0" prefWidth="230.0">
+                                    <children>
+                                        <ComboBox fx:id="StartHourComboBox" prefWidth="150.0" />
+                                        <Label text=":">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <ComboBox fx:id="StartMinComboBox" prefWidth="150.0" />
+                                        <Label text=" ">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <ComboBox fx:id="StartAmPmComboBox" prefWidth="150.0" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="235.0" prefHeight="28.0" prefWidth="165.0" spacing="10.0">
+                            <children>
+                                <DatePicker fx:id="EndDatePicker" prefHeight="25.0" prefWidth="94.0" />
+                                <HBox prefHeight="28.0" prefWidth="219.0">
+                                    <children>
+                                        <ComboBox fx:id="EndHourComboBox" prefWidth="150.0" />
+                                        <Label text=":">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <ComboBox fx:id="EndMinComboBox" prefWidth="150.0" />
+                                        <Label text=" ">
+                                            <font>
+                                                <Font size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <ComboBox fx:id="EndAmPmComboBox" prefWidth="150.0" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                        <TextField fx:id="CustomerIdInput" />
+                        <TextField fx:id="UserIdInput" layoutX="10.0" layoutY="376.0" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox alignment="TOP_RIGHT" layoutX="145.0" layoutY="532.0" prefHeight="28.0" prefWidth="361.0" spacing="20.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#SaveButton" text="Save" />
+                <Button mnemonicParsing="false" onAction="#CancelButton" text="Cancel" />
+            </children>
+        </HBox>
+    </children>
 </AnchorPane>

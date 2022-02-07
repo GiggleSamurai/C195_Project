@@ -380,5 +380,28 @@ public class UserDaoImpl {
             return false;
         }
     }
+
+    public static void SqlUpdateAppointment(int appointment_id, String title, String description, String location, String type, LocalDateTime start_utcDatetime, LocalDateTime end_utcDatetime, int customer_id, int user_id, int contact_id) throws Exception {
+
+        DBConnection.makeConnection();
+
+        String sqlStatement =
+                "UPDATE appointments SET "+
+                        " Title = '" + title + "'" +
+                        ", Description = '" + description + "'" +
+                        ", Location ='" + location + "'" +
+                        ", Type = '" + type + "'" +
+                        ", Start = '" + Timestamp.valueOf(start_utcDatetime) + "'" +
+                        ", End = '" + Timestamp.valueOf(end_utcDatetime) + "'" +
+                        ", Last_Update = NOW()" +
+                        ", Last_Updated_By = '" + currentApplicationUser + "'" +
+                        ", Customer_ID = " + customer_id +
+                        ", User_ID = " + user_id +
+                        ", Contact_ID = " + contact_id +
+                        " WHERE Appointment_ID = " + appointment_id ;
+
+        Query.makeQuery(sqlStatement);
+        All_Appointments.refreshAllAppointments();
+    }
 }
 

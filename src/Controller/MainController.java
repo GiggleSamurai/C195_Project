@@ -17,7 +17,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+
 
 public class MainController  implements Initializable {
     public TableView CustomersTable;
@@ -72,6 +75,8 @@ public class MainController  implements Initializable {
         End.setCellValueFactory(new PropertyValueFactory<>("end_Datetime"));
         appointmentCustomer_ID.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
         User_ID.setCellValueFactory(new PropertyValueFactory<>("user_Id"));
+
+
 
 
     }
@@ -138,7 +143,20 @@ public class MainController  implements Initializable {
         stage.show();
     }
 
-    public void UpdateAppointmentButton(ActionEvent actionEvent) {
+    public void UpdateAppointmentButton(ActionEvent actionEvent) throws IOException {
+        selectedAppointment = (Appointment) AppointmentsTable.getSelectionModel().getSelectedItem();
+        if (selectedAppointment == null) {
+            return;
+        } else {
+            Parent root = FXMLLoader.load(getClass().getResource("/View/AppointmentUpdate.fxml"));
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            //stage.setX(450);
+            //stage.setY(150);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+        }
     }
 
     public void DeleteAppointmentButton(ActionEvent actionEvent) throws Exception {
@@ -166,5 +184,26 @@ public class MainController  implements Initializable {
             } else {return;}
         }
 
+    }
+
+    public void View_Schedules_Button(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/View/ViewByMonth.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setX(450);
+        stage.setY(150);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void ReportButton(ActionEvent actionEvent) {
+
+        System.out.println(All_Appointments.getMonthReport());
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Report");
+        alert.setHeaderText("Report");
+
+        alert.setContentText(All_Appointments.getMonthReport() + "\n"+ All_Appointments.getTypeReport());
+        alert.show();
     }
 }
