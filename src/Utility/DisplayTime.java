@@ -61,8 +61,10 @@ public class DisplayTime {
      */
     public static Integer getHourInt(String hour, String AmOrPm) {
 
-        if (AmOrPm.equals("AM")){
+        if (AmOrPm.equals("AM") && Integer.parseInt(hour) != 12){
             return Integer.parseInt(hour);
+        } else if (Integer.parseInt(hour) == 12 && AmOrPm.equals("PM")) {
+            return 12;
         } else {
             Integer thisHour = Integer.parseInt(hour) + 12;
             if (thisHour == 24) {
@@ -88,22 +90,37 @@ public class DisplayTime {
 
     /**
      *
+     * @param UTCTime utc time
+     * @return converted ET time
+     */
+    public static LocalDateTime UTCTime2EST(LocalDateTime UTCTime) {
+        ZonedDateTime utcZoneTime = ZonedDateTime.of(UTCTime, ZoneOffset.UTC);
+        ZonedDateTime etZoneTime = utcZoneTime.withZoneSameInstant(ZoneId.of("US/Eastern"));
+        LocalDateTime etTime = etZoneTime.toLocalDateTime();
+        return etTime;
+    }
+
+    /**
+     *
      * @param StartUTCDateTime the appointment start UTC time
      * @param EndUTCDateTime the appointment end UTC time
      * @return boolean statement if is in business hour or not
      */
     public static boolean inBusinessHours(LocalDateTime StartUTCDateTime, LocalDateTime EndUTCDateTime) {
-        int StartHour = StartUTCDateTime.getHour();
-        int EndHour = EndUTCDateTime.getHour();
+
+        int StartHour = UTCTime2EST(StartUTCDateTime).getHour();
+        int EndHour = UTCTime2EST(EndUTCDateTime).getHour();
         int OpenESTHour = 8 + 0; //0=AM
         int CloseESTHour = 10 + 12; //12=PM
-        //EST = UTC-5:00
-        int OpenUTCHour = OpenESTHour + 5;
-        int CloseUTCHour = CloseESTHour + 5;
 
-        if (StartHour>=OpenUTCHour && StartHour<=CloseUTCHour && EndHour>=OpenUTCHour && EndHour<=CloseUTCHour) {
-            //In Business Hour
-            return true;
+        int EndHourMin = UTCTime2EST(EndUTCDateTime).getMinute();
+        if (StartHour>=OpenESTHour && StartHour<=CloseESTHour && EndHour>=OpenESTHour && EndHour<=CloseESTHour) {
+            if (EndHour==CloseESTHour && EndHourMin != 0){
+                return false;
+            } else {
+                //In Business Hour
+                return true;
+            }
         } else {
             return false;
         }

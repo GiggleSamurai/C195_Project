@@ -27,6 +27,8 @@ public class CustomerAddController implements Initializable {
     public TextField PhoneInput;
     public ComboBox DivisionIdComboBox;
     public First_Division selectedDivision;
+    public Countries selectedCountry;
+    public ComboBox CountryComboBox;
 
     /**
      *
@@ -71,14 +73,24 @@ public class CustomerAddController implements Initializable {
      */
     public void initialize(URL location, ResourceBundle resources){
         try {
-            UserDaoImpl.SqlAllFirst_Division();
+            UserDaoImpl.SqlAllCountries();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        DivisionIdComboBox.setItems(All_First_Division.getAllFirst_Division());
-        DivisionIdComboBox.getSelectionModel().selectFirst();
+        CountryComboBox.setItems(All_Countries.getAll_Countries());
+
     }
 
+    /**
+     *  sql to get country list with the country is selected
+     * @param actionEvent trigger when country combo box is switched
+     * @throws Exception
+     */
+    public void CountrySwitchTrigger(ActionEvent actionEvent) throws Exception {
+        selectedCountry = (Countries) CountryComboBox.getSelectionModel().getSelectedItem();
+        DivisionIdComboBox.setItems(UserDaoImpl.SqlFirst_DivisionByCountry(selectedCountry.getCountry_Id()));
+        DivisionIdComboBox.getSelectionModel().selectFirst();
 
+    }
 }

@@ -90,6 +90,7 @@ public class AppointmentAddController implements Initializable {
             String StartHour = StartHourComboBox.getSelectionModel().getSelectedItem().toString();
             String StartAMorPM = StartAmPmComboBox.getSelectionModel().getSelectedItem().toString();
             String StartMinute = StartMinComboBox.getSelectionModel().getSelectedItem().toString();
+            //User input
             LocalDateTime userSelectStartTime = LocalDateTime.of(StartDate.getYear(), StartDate.getMonthValue(), StartDate.getDayOfMonth(), DisplayTime.getHourInt(StartHour, StartAMorPM), DisplayTime.getMinuteInt(StartMinute));
             LocalDateTime start_utcDatetime = DisplayTime.userTime2UTC(userSelectStartTime);
 

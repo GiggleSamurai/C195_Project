@@ -142,6 +142,7 @@ public class AppointmentUpdateController implements Initializable {
             LocalDateTime userSelectEndTime = LocalDateTime.of(EndDate.getYear(), EndDate.getMonthValue(), EndDate.getDayOfMonth(), DisplayTime.getHourInt(EndHour, EndAMorPM), DisplayTime.getMinuteInt(EndMinute));
             LocalDateTime end_utcDatetime = DisplayTime.userTime2UTC(userSelectEndTime);
 
+
             int contact_id = ((Contact) ContactComboBox.getSelectionModel().getSelectedItem()).getContact_Id();
             int customer_id = Integer.parseInt(CustomerIdInput.getText());
             int user_id = Integer.parseInt(UserIdInput.getText());

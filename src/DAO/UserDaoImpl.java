@@ -6,6 +6,9 @@
 package DAO;
 
 import Model.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -415,5 +418,76 @@ public class UserDaoImpl {
         All_Appointments.refreshAllAppointments();
     }
 
-}
+    /**
+     *
+     * @param country_id the country ID to set
+     * @return list of first division that match the country ID
+     * @throws Exception
+     */
+    public static ObservableList<First_Division> SqlFirst_DivisionByCountry(int country_id) throws Exception {
+        ObservableList<First_Division> listOfFirst_Division = FXCollections.observableArrayList();
+        DBConnection.makeConnection();
+        String sqlStatement="select * from first_level_divisions where Country_ID = "+ Integer.toString(country_id);
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
 
+        while(result.next()) {
+
+            int division_id = result.getInt("Division_ID");
+            String division = result.getString("Division");
+            First_Division thisFirst_Division = new First_Division(division_id,division);
+
+            listOfFirst_Division.add(thisFirst_Division);
+
+        }
+        DBConnection.closeConnection();
+
+        return listOfFirst_Division;
+    }
+
+
+    /**
+     *  SQL query all the first country ID & countries
+     * @throws Exception
+     */
+    public static void SqlAllCountries() throws Exception {
+        DBConnection.makeConnection();
+        String sqlStatement="select * from countries";
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+        All_Countries.clearAll_Country();
+
+        while(result.next()) {
+
+            int country_id = result.getInt("Country_ID");
+            String country = result.getString("Country");
+            Countries thisCountry = new Countries(country_id,country);
+
+            All_Countries.add_Country(thisCountry);
+
+        }
+        DBConnection.closeConnection();
+
+    }
+
+    /**
+     *
+     * @param First_DivisionID First Division ID to look up
+     * @return SQL query lookup the first country ID
+     * @throws Exception
+     */
+    public static int SqlLookUpCountryID(int First_DivisionID) throws Exception {
+        int country_id = 0;
+        DBConnection.makeConnection();
+        String sqlStatement="select Country_ID from first_level_divisions where Division_ID = "+ Integer.toString(First_DivisionID);
+        Query.makeQuery(sqlStatement);
+        ResultSet result = Query.getResult();
+
+        while(result.next()) {
+            country_id = result.getInt("Country_ID");
+        }
+        DBConnection.closeConnection();
+
+        return country_id;
+    }
+}

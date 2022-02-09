@@ -40,6 +40,11 @@
                                 <Font size="16.0" />
                             </font>
                         </Label>
+                  <Label layoutX="10.0" layoutY="235.0" text="Country">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
                         <Label text="Division ID">
                             <font>
                                 <Font size="16.0" />
@@ -54,6 +59,7 @@
                         <TextField fx:id="AddressInput" />
                         <TextField fx:id="PostalCodeInput" />
                         <TextField fx:id="PhoneInput" />
+                  <ComboBox fx:id="CountryComboBox" layoutX="10.0" layoutY="235.0" onAction="#CountrySwitchTrigger" prefHeight="25.0" prefWidth="166.0" />
                         <ComboBox fx:id="DivisionIdComboBox" prefHeight="25.0" prefWidth="166.0" />
                     </children>
                 </VBox>

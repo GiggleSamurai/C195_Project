@@ -47,7 +47,8 @@ public class MainController  implements Initializable {
 
     /**
      * Initialize elements when this FXML form is load
-     * @LambdaExpression void function for initializing element for main scene
+     * @LambdaExpression void function for initializing element for main scene, since both main controller and login controller are shared the same method, but initiating different element,the lambda expression makes it convenient with abstract method, which can be defined differently with flexibility.
+     *
      */
     public void initialize(URL location, ResourceBundle resources){
         FunctionalInterface mainInitialize = ()-> {
@@ -116,7 +117,7 @@ public class MainController  implements Initializable {
 
     /**
      *
-     * @param actionEvent delete customer if there is no appointment, otherwise pop an alert
+     * @param actionEvent delete customer if there is no appointment, otherwise pop an alert. A custom message show after delete.
      * @throws Exception
      */
     public void DeleteCustomerButton(ActionEvent actionEvent) throws Exception {
@@ -139,6 +140,7 @@ public class MainController  implements Initializable {
                     }
                 }
                 if (hasAppointment == false) {
+                    String deletedName= SelectedCustomer.getCustomer_Name();
                     UserDaoImpl.SqlDeleteCustomer(SelectedCustomer);
 
                     Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
@@ -148,6 +150,12 @@ public class MainController  implements Initializable {
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
+
+                    Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+                    infoAlert.setTitle("Message");
+                    infoAlert.setHeaderText("Customer is Deleted");
+                    infoAlert.setContentText("Customer "+deletedName+" is deleted.");
+                    infoAlert.show();
                 } else{
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setTitle("Delete Error");
@@ -194,7 +202,7 @@ public class MainController  implements Initializable {
 
     /**
      *
-     * @param actionEvent delete appointment if no error
+     * @param actionEvent delete appointment if no error. A custom message show after delete.
      * @throws Exception
      */
     public void DeleteAppointmentButton(ActionEvent actionEvent) throws Exception {
@@ -209,6 +217,8 @@ public class MainController  implements Initializable {
             alert.setHeaderText("Delete");
             alert.setContentText("Do you want to delete this Appointment?");
             if (alert.showAndWait().get()== ButtonType.OK) {
+                String deletedAppointmentID = Integer.toString(SelectedAppointment.getAppointment_ID());
+                String deletedAppointmentType = SelectedAppointment.getType();
                 UserDaoImpl.SqlDeleteAppointment(SelectedAppointment);
 
                 Parent root = FXMLLoader.load(getClass().getResource("/View/Main.fxml"));
@@ -218,6 +228,12 @@ public class MainController  implements Initializable {
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
+
+                Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+                infoAlert.setTitle("Message");
+                infoAlert.setHeaderText("Appointment is Deleted");
+                infoAlert.setContentText("The Appointment  ID: "+deletedAppointmentID +"\t Type: "+ deletedAppointmentType + "\tis deleted.");
+                infoAlert.show();
 
             } else {return;}
         }
