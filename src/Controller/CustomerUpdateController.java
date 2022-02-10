@@ -115,12 +115,17 @@ public class CustomerUpdateController implements Initializable {
      * @throws Exception
      */
     public void CountrySwitchTrigger(ActionEvent actionEvent) throws Exception {
-        if (CountryComboBox.getSelectionModel() == null || selectedCountry == null ){}
+        try {
+            selectedCountry = (Countries) CountryComboBox.getSelectionModel().getSelectedItem();
+            DivisionIdComboBox.setItems(UserDaoImpl.SqlFirst_DivisionByCountry(selectedCountry.getCountry_Id()));
+            DivisionIdComboBox.getSelectionModel().selectFirst();
+        } catch(Exception e){}
+      /*  if (CountryComboBox.getSelectionModel() == null || selectedCountry == null ){}
         else {
             selectedCountry = (Countries) CountryComboBox.getSelectionModel().getSelectedItem();
             DivisionIdComboBox.setItems(UserDaoImpl.SqlFirst_DivisionByCountry(selectedCountry.getCountry_Id()));
             DivisionIdComboBox.getSelectionModel().selectFirst();
-        }
+        }*/
 
     }
 

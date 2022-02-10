@@ -44,10 +44,12 @@ public class MainController  implements Initializable {
 
     public static Customer selectedCustomer;
     public static Appointment selectedAppointment;
+    public TableColumn Country;
+    public TableColumn Division;
 
     /**
-     * Initialize elements when this FXML form is load
-     * @LambdaExpression void function for initializing element for main scene, since both main controller and login controller are shared the same method, but initiating different element,the lambda expression makes it convenient with abstract method, which can be defined differently with flexibility.
+     *
+     * Lambda Expression is used as void function for initializing main controller element, since both main controller and login controller are shared the same method, but initiating different element,the lambda expression makes it convenient with abstract method, which can be defined differently with flexibility.
      *
      */
     public void initialize(URL location, ResourceBundle resources){
@@ -64,7 +66,7 @@ public class MainController  implements Initializable {
             Address.setCellValueFactory(new PropertyValueFactory<>("address"));
             Postal_Code.setCellValueFactory(new PropertyValueFactory<>("postal_Code"));
             Phone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-            Division_ID.setCellValueFactory(new PropertyValueFactory<>("division_Id"));
+           // Division_ID.setCellValueFactory(new PropertyValueFactory<>("division_Id"));
 
             AppointmentsTable.setItems(All_Appointments.getAllAppointments());
             Appointment_ID.setCellValueFactory(new PropertyValueFactory<>("appointment_ID"));
@@ -77,7 +79,11 @@ public class MainController  implements Initializable {
             End.setCellValueFactory(new PropertyValueFactory<>("end_Datetime"));
             appointmentCustomer_ID.setCellValueFactory(new PropertyValueFactory<>("customer_Id"));
             User_ID.setCellValueFactory(new PropertyValueFactory<>("user_Id"));
+
+            Country.setCellValueFactory(new PropertyValueFactory<>("country"));
+            Division.setCellValueFactory(new PropertyValueFactory<>("division"));
         };
+
 
         mainInitialize.initializeLambda();
 

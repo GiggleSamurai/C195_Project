@@ -104,8 +104,8 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Initialize elements when this FXML form is load
-     * @LambdaExpression void function for initializing element for login, since both main controller and login controller are shared the same method, but initiating different element,the lambda expression makes it convenient with abstract method, which can be defined differently with flexibility.
+     * Lambda Expression is used as void function for initializing login controller element, since both main controller and login controller are shared the same method, but initiating different element,the lambda expression makes it convenient with abstract method, which can be defined differently with flexibility.
+     *
      */
     public void initialize(URL location, ResourceBundle resources){
         FunctionalInterface loginInitialize = ()-> {

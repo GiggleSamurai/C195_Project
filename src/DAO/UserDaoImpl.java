@@ -70,7 +70,8 @@ public class UserDaoImpl {
     public static void SqlAllCustomers() throws SQLException, Exception{
 
         DBConnection.makeConnection();
-        String sqlStatement="select * from customers";
+        String sqlStatement="select * from customers JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID" +
+                " JOIN countries ON first_level_divisions.Country_ID = countries.Country_ID";
         Query.makeQuery(sqlStatement);
         ResultSet result = Query.getResult();
 
@@ -84,8 +85,10 @@ public class UserDaoImpl {
             String postal_code = result.getString("Postal_Code");
             String phone = result.getString("Phone");
             int division_id = result.getInt("Division_ID");
+            String country = result.getString("Country");
+            String division = result.getString("Division");
 
-            Customer thisCustomer = new Customer(customer_id, customer_name, address, postal_code, phone, division_id);
+            Customer thisCustomer = new Customer(customer_id, customer_name, address, postal_code, phone,country, division, division_id);
             All_Customers.addCustomer(thisCustomer);
 
         }
@@ -248,7 +251,7 @@ public class UserDaoImpl {
         Query.makeQuery(sqlStatement);
         ResultSet result = Query.getResult();
 
-        All_First_Division.clearAllFirst_Division();
+        All_Contacts.clearAllContact();
 
         while (result.next()) {
 

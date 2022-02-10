@@ -3,7 +3,7 @@ Application Purpose: Provide a friendly UI interface for SQL operation on databa
     Function such as generate report, view in month or week.
 Author: Louis Wong
 E-Mail: lwong33@wgu.edu
-Application Version: v1
+Application Version: v3
 Date: 2-7-2022
 IDE: IntelliJ IDEA 2021.3.2 (Community Edition)
 JDK: 17(Oracle OpenJDK version 17.0.1)
